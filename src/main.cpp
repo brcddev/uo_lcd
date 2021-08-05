@@ -17,7 +17,25 @@ SH1106Lib lcd;
 #include "GyverEncoder.h"                     // Библиотеки с сайта 
 #include "directTimers.h"                     // https://codeload.github.com/AlexGyver/GyverLibs/zip/master
 #include "Wire.h"
+#include <TMCStepper.h>
 #include "uo.h"
+#define STEP_PIN         3 // Step
+#define SW_RX            4 // TMC2208/TMC2224 SoftwareSerial receive pin
+#define SW_TX            5 // TMC2208/TMC2224 SoftwareSerial transmit pin
+#define STALL_VALUE     100 // [0..255]
+#define DRIVER_ADDRESS 0b00 // TMC2209 Driver address according to MS1 and MS2
+
+#define R_SENSE 0.11f // Match to your driver
+                      // SilentStepStick series use 0.11
+                      // UltiMachine Einsy and Archim2 boards use 0.2
+                      // Panucatt BSD2660 uses 0.1
+                      // Watterott TMC5160 uses 0.075
+
+// Select your stepper driver type
+//TMC2209Stepper driver(&SERIAL_PORT, R_SENSE, DRIVER_ADDRESS);
+TMC2209Stepper driver(SW_RX, SW_TX, R_SENSE, DRIVER_ADDRESS);
+
+using namespace TMC2208_n;
 //--------------------------- Настройка железа ---------------------------------------------
 // Подключение энкодера
 #define SW2 8                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
@@ -229,6 +247,17 @@ void setup()
   digitalWrite(STEP, 1);
   digitalWrite(PIEZO, 1);
   digitalWrite(LED, 1);
+  //drv
+  driver.begin();
+  driver.toff(4);
+  driver.blank_time(24);
+  driver.rms_current(1000); // mA
+  driver.microsteps(8);
+  driver.TCOOLTHRS(0xFFFFF); // 20bit max
+  driver.semin(5);
+  driver.semax(2);
+  driver.sedn(0b01);
+  driver.SGTHRS(STALL_VALUE);
 
   // Настройка таймера 1, он задаёт частоту шагания двигателя
   TIMER1_setClock(T1ClockDivider);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8
