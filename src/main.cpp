@@ -1,10 +1,6 @@
 //пины подключения настраиваем в файле LCDSoftI2C.cpp
 #define I2C_PULLUP 1
 #define I2C_FASTMODE 1
-//#define SCL_PORT PORTD
-//#define SDA_PORT PORTD
-//#define SCL_PIN 2       // Arduino Pin D2 - софтовый SCL
-//#define SDA_PIN 3       // Arduino Pin D3 - софтовый SDA
 #define SCL_PORT PORTB
 #define SDA_PORT PORTB
 #define SCL_PIN 2       // Arduino Pin 10
@@ -116,7 +112,6 @@ String formatNum(uint32_t Number, int lenth);
 void tryToSaveStepsFor100ml();
 void decreaseRate();
 void increaseRate();
-//void calcOCR1A(uint16_t rate);
 void calcTotalVolume();
 void calcOCR1A();
 void oneTenthSub();
