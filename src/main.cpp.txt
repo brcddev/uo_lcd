@@ -1,0 +1,994 @@
+#include "config.h"
+
+
+#include <EEPROM.h>                           // Стандартная библиотека
+#include "GyverEncoder.h"                     // Библиотеки с сайта 
+#include "directTimers.h"                     // https://codeload.github.com/AlexGyver/GyverLibs/zip/master
+
+
+#ifdef LCD_20_4
+#define LCD_COLS 20
+#define LCD_ROWS 4
+#define DR_VOL_FMT 5
+#define RATE_FMT 5
+#else
+#define LCD_COLS 16
+#define LCD_ROWS 2
+#define DR_VOL_FMT 4
+#define RATE_FMT 4
+#endif
+
+#define SCL_PORT PORTB
+#define SDA_PORT PORTB
+#define SCL_PIN 2       // Arduino Pin 10
+#define SDA_PIN 3       // Arduino Pin 11
+
+#ifdef SOFT_I2C
+//пины подключения настраиваем в файле LCDSoftI2C.cpp
+
+//https://www.arduino.cc/en/Hacking/PinMapping168
+
+#include "LCDSoftI2C.h"
+LCDSoftI2C lcd(0x27, LCD_COLS, LCD_ROWS); 
+#else
+#include "microLiquidCrystal_I2C.h"
+// Подключение 2004
+LiquidCrystal_I2C lcd(0x27, LCD_COLS, LCD_ROWS);       // Адрес дисплея может быть не 0х27, например 0x3F
+#endif
+
+
+#include <SH1106Lib.h>
+#include "glcdfont.h"
+SH1106Lib display;
+
+#ifdef DS_PIN
+#include <microDS18B20.h>
+MicroDS18B20 *ds;
+uint32_t temp_timer;
+float curr_temp,set_temp;
+bool temp_check_enable=false;
+bool ds_found=false;
+uint32_t alarm_timer;
+uint8_t ds_delta=2,err_temp=0;
+#endif
+//#include "OneWireSlave.h"
+//--------------------------- Настройка железа ---------------------------------------------
+// Подключение внешнего обмена по 1-wire
+//#define OneWirePin  A0
+//OneWireSlave MyOneWire(OneWirePin);
+//char rom[8] = {0x01, 0xAD, 0xDA, 0xCE, 0x0F, 0x00, 0x00, 0x00};
+Encoder enc1(SW1, SW2, KEY, TYPE2);
+
+#define soundA B00000101                      // Ритм автостопа
+#define soundB B00011111                      // Ритм внешнего стопа
+
+
+//--------------------------------------------------------------------------------------
+// Наименования режимов работы
+//----------------------------------------------
+#define RUNNING               0               //
+#define PAUSED                1               //
+#define PAUSED_BY_EXT         2               //
+#define PAUSED_BY_VOL         3               //
+#define SELECT_VOL            4               //
+#define TUNING                10              //
+#define TUNING_PAUSE          11              //
+
+#define PAUSED_BY_TEMP        20
+//----------------------------------------------
+// Константы
+//----------------------------------------------
+#define maximumRate           2000            //  Максимальная скорость отбора мл/час
+#define rateStep              10              //  Мелкий шаг регулировки отбора
+#define rateMidStep           50              //  Средний шаг регулировки отбора
+#define rateBigStep           100             //  Крупный шаг регулировки отбора
+#define volStep               10              //  Шаг регулировки дозатора
+#define volMidStep            50              //  Средний шаг регулировки дозатора
+#define volBigStep            500             //  Крупный шаг регулировки дозатора
+#define maxDrinkVol           5000            //  Максимальный объем, выдаваемый дозатором
+#define defaultDrink          0               //  Объем дозатора по умолчанию. 0 - без ограничения.
+#define defaultStepsFor100ml  600000          //  Количество шагов потребное для отбора 100 мл по умолчанию при шаге/8
+#define minStepsFor100ml      150000          //  Минимально возможное число шагов для отбора 100 мл при шаге/8
+#define maxStepsFor100ml      1500000
+//----------------------------------------------
+// Переменные
+//----------------------------------------------
+unsigned long stepsFor100ml;                  //  Количество шагов потребное для отбора 100 мл
+unsigned int  stepsForOneMl;                  //  Количество шагов потребное для отбора 1 мл
+unsigned long stepsCount     = 0;             //  Счетчик количества шагов
+unsigned long drinkBackCounter = 0;           //  Обратный счётчик шагов дозатора
+unsigned long temp           = 0;             //  Временная переменная для разнообразных нужд
+unsigned int  timer1EndValue = 65535;         //  Значение при котором происходит прерывание от таймера 1 (11739)
+byte          thousandth     = 0;             //
+byte          tenth          = 0;             //
+byte          counterA       = 0;             //
+byte          pattern        = 0;             //
+byte          currentMode    = RUNNING;       // Текущий режим работы
+uint16_t      rate           = 0;             // Скорость отбора мл/час 0 - maximumRate
+uint16_t      totalVolume    = 0;             // Общий объем отбора мл
+uint16_t      drinkVolume    = 0;             // Шаг рОзлива
+uint16_t      remainVolume   = 0;
+bool          newSecond      = false;
+bool          newTenth       = false;
+bool          stepEnabled    = false;
+bool          tmasStop       = false;
+bool          drinkStop      = false;
+bool          newDrinkVol    = false;
+bool          sndFlag        = false;
+
+//--------------------------------------------------------------------------------------
+// Сообщения
+#define STRING_00 "--- NORMAL  MODE ---"
+#define STRING_01 "---    PAUSED    ---"
+#define STRING_02 "--- PAUSED by OP ---"
+#define STRING_03 "-- PAUSED by TMAC --"
+#define STRING_04 "-- PAUSED by AUTO --"
+#define STRING_05 "--- SELECT  STEP ---"
+#define STRING_10 "--- TUNING  MODE ---"
+#define STRING_11 "--- TUNING PAUSE ---"
+#define STRING_12 "-Counter too little-"
+#define STRING_13 "-Counter too large -"
+#define STRING_14 "-- 100 ml UPDATED --"
+
+#define STRING_20 "TEMP MODE 00.0->00.0"
+#define STRING_21 "-- PAUSED by Temp --"
+//--------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------
+String formatNum(uint32_t Number, int lenth);
+void tryToSaveStepsFor100ml();
+void decreaseRate();
+void increaseRate();
+//void calcOCR1A(uint16_t rate);
+void calcTotalVolume();
+void calcOCR1A();
+void oneTenthSub();
+void oneSecSub();
+void resumeRun();
+inline void print_name(String s);
+inline void print_tun_rate();
+inline void print_run_rate();
+inline void print_drink_vol();
+inline void print_temp_pause();
+String utf8rus(String source);
+
+uint32_t BaseOCR1A=0;
+
+void calcBaseOCR1A(){
+  uint16_t prescalers[]={0,1,8,64,256,1024};
+  uint8_t prescaler=TCCR1B &((1 << CS12) | (1 << CS11) | (1 << CS10));
+  BaseOCR1A=round((float)F_CPU*3600/2/prescalers[prescaler]/ stepsForOneMl);
+}
+#ifdef AUTO_RATE
+void auto_rate(){
+  uint16_t dec_rate;
+  if (rate > MIN_RATE){
+    dec_rate=rate/100*AUTO_RATE;
+    if ((rate-dec_rate)<MIN_RATE)rate=MIN_RATE;
+    else rate-=dec_rate; 
+    calcOCR1A();
+  }
+}
+#endif
+
+#ifdef DS_PIN
+
+
+void read_temp()
+{
+
+  float ttemp;
+  if((millis()-temp_timer)>DS_TIME_CHECK){
+    ttemp=ds->getTemp();
+    ds->requestTemp();
+    temp_timer=millis();
+    if(ttemp){
+      curr_temp=ttemp;
+      err_temp=0;
+    }
+    else err_temp++;
+  }
+}
+
+
+void temp_check()
+{
+  read_temp();
+  if(temp_check_enable){
+    if((set_temp+ds_delta/10)>curr_temp){
+      stepEnabled = false;
+      currentMode = PAUSED_BY_TEMP;
+      print_name(STRING_21);
+      alarm_timer=millis();
+    }
+  }
+}
+#endif
+//--------------------------------------------------------------------------------------
+void setup()
+{
+  // Настройка входов и выходов
+  pinMode(STEP, OUTPUT);
+  pinMode(PIEZO, OUTPUT);
+  pinMode(LED, OUTPUT);
+  pinMode(SW1,  INPUT_PULLUP);
+  pinMode(SW2,  INPUT_PULLUP);
+  pinMode(KEY,  INPUT_PULLUP);
+  pinMode(TMAS, INPUT_PULLUP);
+//  pinMode(OneWirePin, INPUT_PULLUP);
+  digitalWrite(STEP, 1);
+  digitalWrite(PIEZO, 1);
+  digitalWrite(LED, 1);
+  #ifdef DS_PIN
+  ds = new MicroDS18B20(DS_PIN);
+  ds->setResolution(12);
+  ds->requestTemp();
+  #endif
+  //
+//  MyOneWire.setRom(rom);
+//  Serial.begin(38400);
+
+  // Настройка таймера 1, он задаёт частоту шагания двигателя
+  TIMER1_setClock(PRESCALER_64);             // Частота тактирования таймера 1: 16/64 = 0.25 МГц при шаге/8
+  TIMER1_setMode(CTC_MODE);                 // Режим работы таймера - сравнение со значением, прерывание и рестарт
+  TIMER1_COMPA_setValue(timer1EndValue);    // Значение для сравнения
+  TIMER1_attach_COMPA();                    // Прерывание от таймера 1 по сравнению
+
+  // Настройка таймера 2, он отсчитывает временные интервалы для работы программы
+  TIMER2_setClock(PRESCALER_128);           // Частота тактирования таймера 2: 16/128 = 0.125 МГц
+  TIMER2_setMode(CTC_MODE);                 // включаем сброс таймера по совпадению
+  TIMER2_COMPA_setValue(124);               // настраиваем следование прерываний с частотой 1000 гц
+  TIMER2_attach_COMPA();                    // прерывание с опросом энкодера
+  //
+  // Настройка дисплея
+  lcd.init();
+  lcd.backlight();
+  rate = 0;
+  totalVolume = 0;
+  stepsCount = 0;
+  stepEnabled = false;
+
+  // Попытка прочитать установки из EEPROM
+  EEPROM.get(0, stepsFor100ml);
+  if ((stepsFor100ml < minStepsFor100ml) or (stepsFor100ml > minStepsFor100ml * 4)) // Если в EEPROM не установлено число шагов на 100 мл, то
+  {
+    stepsFor100ml = defaultStepsFor100ml;                     // Установим число шагов на 100 мл по умолчанию
+  }
+  stepsForOneMl = round((float)stepsFor100ml / 100);
+  calcBaseOCR1A();// вызываем calcBaseOCR1A() после изменения делителя или количество шагов на 1 мл(stepsForOneMl), но до calcOCR1A()
+  calcOCR1A();
+  drinkVolume = defaultDrink;
+  drinkBackCounter = (uint32_t)drinkVolume * stepsForOneMl - 1;
+  if (!digitalRead(KEY)) {
+    currentMode = TUNING;
+    print_name(STRING_10);
+    lcd.setCursor(0, 1);
+    lcd.print("Rate:    0 Vol:    0");
+    lcd.setCursor(0, 2);
+    lcd.print("Step counter:       ");
+    lcd.setCursor(13, 2);
+    lcd.print(formatNum(stepsCount, 7));
+    lcd.setCursor(0, 3);
+    lcd.print("Current 100 :       ");
+    lcd.setCursor(13, 3);
+    lcd.print(formatNum(stepsFor100ml, 7));
+    enc1.isHolded();
+  }
+  else {
+    currentMode = RUNNING;
+    print_name(STRING_00);
+    lcd.setCursor(0, 1);
+    lcd.print("  Speed  :     0 mlh");
+    lcd.setCursor(0, 2);
+    lcd.print("  Total  :     0 ml ");
+    lcd.setCursor(0, 3);
+    lcd.print("Autostop :     0 ml ");
+  }
+}
+//--------------------------------------------------------------------------------------
+//---------------------- Начало основного цикла ----------------------------------------
+void loop()
+{
+  if (newSecond) {
+    newSecond = false;
+    oneSecSub();
+  }
+  if (newTenth)  {
+    newTenth = false;
+    oneTenthSub();
+  }
+  //---------------------------------------------------------------
+  switch (currentMode)
+  {
+    //-------------------------------------------------------------
+    // Режим калибровки насоса основной экран ---------------------
+    //-------------------------------------------------------------
+    case TUNING:            // Настройка количества шагов на 100 мл.
+      {
+        //--------------------
+        if (enc1.isRight()) // Поворот по часовой стрелке увеличивает частоту шагов
+        {
+          increaseRate();
+          stepEnabled = true;
+          print_tun_rate();
+        }
+        //--------------------
+        if (enc1.isLeft()) // Поворот против часовой стрелки уменьшает частоту шагов
+        {
+          decreaseRate();
+          if (rate != 0)
+          {
+            stepEnabled = true;
+          }
+          else
+          {
+            stepEnabled = false;
+          }
+          print_tun_rate();
+        }
+        //--------------------
+        if (enc1.isClick())
+        {
+          stepEnabled = false;
+          currentMode = TUNING_PAUSE;
+          print_name(STRING_11);
+        }
+        //--------------------
+        if (enc1.isHolded())
+        {
+          lcd.clear();
+          lcd.setCursor(0, 1);
+          lcd.print("-- RELEASE BUTTON --");
+          while (!digitalRead(KEY));
+          delay(1000);
+          //lcd.clear();
+          setup();
+        }
+        //--------------------
+      }
+      break;
+    //-------------------------------------------------------------
+    // Пауза в режиме калибровки насоса ---------------------------
+    //-------------------------------------------------------------
+    case TUNING_PAUSE:
+      {
+        //--------------------
+        if (enc1.isRight()) // Поворот по часовой стрелке увеличивает частоту шагов
+        {
+          increaseRate();
+          print_tun_rate();
+        }
+        //--------------------
+        if (enc1.isLeft()) // Поворот против часовой стрелки уменьшает частоту шагов
+        {
+          decreaseRate();
+          print_tun_rate();
+        }
+        //--------------------
+        if (enc1.isClick())
+        {
+          if (rate !=0)
+          {
+            stepEnabled = true;
+          }
+          else
+          {
+            stepEnabled = false;
+          }
+          currentMode = TUNING;
+          print_name(STRING_10);
+        }
+        //--------------------
+        if (enc1.isHolded())    // Здесь сброс в 0 счетчика шагов и общего объема
+        {
+          stepsCount = 0;
+          totalVolume = 0;
+        }
+        //--------------------
+        if (enc1.isRightH())    // Пытаемся запомнить количество шагов на 100 мл в EEPROM
+        {
+          tryToSaveStepsFor100ml();
+        }
+        //--------------------
+        if (enc1.isLeftH())    // Пытаемся запомнить количество шагов на 100 мл в EEPROM
+        {
+          tryToSaveStepsFor100ml();
+        }
+        //--------------------
+      }
+      break;
+    //-------------------------------------------------------------
+    // Основной режим. Идёт отбор. --------------------------------
+    //-------------------------------------------------------------
+    case RUNNING:
+      {
+        //--------------------
+        if (enc1.isClick()) // Клик на кнопку, переход в режим паузы
+        {
+          stepEnabled = false;
+          currentMode = PAUSED;
+          print_name(STRING_02);
+        }
+        //--------------------
+        if (tmasStop)      // Внешний сигнал, переход в режим паузы по внешнему сигналу
+        {
+          stepEnabled = false;
+          currentMode = PAUSED_BY_EXT;
+          print_name(STRING_03);
+          pattern = soundB;
+          sndFlag = true;
+        }
+        //--------------------
+        if (drinkStop)     // Налит запрошенный объем, переход в паузу.
+        {
+          stepEnabled = false;
+          drinkStop = false;
+          currentMode = PAUSED_BY_VOL;
+          drinkBackCounter = (uint32_t)drinkVolume * stepsForOneMl - 1;
+          print_name(STRING_04);
+          //        "                    "
+          pattern = soundA;
+          sndFlag = true;
+        }
+        //--------------------
+        if (enc1.isRight())     // Вращение по часовой (режим RUNNING)
+        {
+          increaseRate();
+          stepEnabled = true;
+          print_run_rate();
+        }
+        //--------------------
+        if (enc1.isLeft())      // Вращение против часовой (режим RUNNING)
+        {
+          decreaseRate();
+          if (rate != 0)
+          {
+            stepEnabled = true;
+          }
+          else
+          {
+            stepEnabled = false;
+          }
+          print_run_rate();
+        }
+        //--------------------
+        if (enc1.isHolded())    // Удержание кнопки, сброс общего счетчика
+        {
+          if ((rate == 0) and (stepsCount != 0))
+          {
+            stepsCount = 0;
+            totalVolume = 0;
+            drinkBackCounter = (uint32_t)drinkVolume * stepsForOneMl - 1;
+          }
+          else{
+            #ifdef DS_PIN
+            if (ds_found){
+              temp_check_enable=!temp_check_enable;
+            }
+            resumeRun();
+            #endif
+          }
+        }
+        //--------------------
+      }
+      break;
+    //-------------------------------------------------------------
+    // Остановка по нажатию кнопки --------------------------------
+    //-------------------------------------------------------------
+    case PAUSED:
+      {
+        //--------------------
+        //--------------------
+        if (enc1.isClick())
+        {
+          resumeRun();
+        }
+        //--------------------
+        if (enc1.isRight())
+        {
+          increaseRate();
+          print_run_rate();
+        }
+        //--------------------
+        if (enc1.isLeft())
+        {
+          decreaseRate();
+          print_run_rate();
+        }
+        //--------------------
+        if (enc1.isHolded())
+        {
+          currentMode = SELECT_VOL;
+          print_name(STRING_05);
+          remainVolume = drinkVolume;
+        }
+        //--------------------
+      }
+      break;
+    //-------------------------------------------------------------
+    // Остановка по внешнему сигналу ------------------------------
+    //-------------------------------------------------------------
+    case PAUSED_BY_EXT:
+      {
+        if (!tmasStop)
+        {
+          sndFlag = false;
+          #ifdef AUTO_RATE
+          auto_rate();
+          #endif 
+          resumeRun();
+        }
+        //--------------------
+        if (enc1.isRight() || enc1.isLeft() || enc1.isClick())
+        {
+          sndFlag = false;
+        }
+        //--------------------
+      }
+      break;
+    //-------------------------------------------------------------
+    // Остановка по превышению температуры-------------------------
+    //-------------------------------------------------------------
+    #ifdef DS_PIN
+    case PAUSED_BY_TEMP:
+      {
+        if ((curr_temp<=set_temp))
+        {
+          sndFlag = false;
+          #ifdef AUTO_RATE
+          auto_rate();
+          #endif 
+          resumeRun();
+        }
+        //--------------------
+        if (enc1.isRight()){
+          ds_delta++;
+          if (ds_delta>20) ds_delta=20;
+          print_temp_pause();
+        }
+        if (enc1.isLeft()){
+          ds_delta--;
+          if (ds_delta<1)ds_delta=1;
+          print_temp_pause();
+        }        
+        if((millis()-alarm_timer)>DS_ALARM_TIME){
+          pattern = soundB;
+          sndFlag = true;
+        }
+        if (enc1.isClick())
+        {
+          sndFlag = false;
+          alarm_timer=millis();
+        }
+        //--------------------
+      }
+      break;
+      #endif
+    //-------------------------------------------------------------
+
+
+
+
+    //-------------------------------------------------------------
+    // Остановка по достижению заданного разового объема отбора ---
+    //-------------------------------------------------------------
+    case PAUSED_BY_VOL:
+      {
+        //--------------------
+        if (enc1.isHolded())
+        {
+          currentMode = SELECT_VOL;
+          print_name(STRING_05);
+          sndFlag = false;                  // Заткнуть пищалку
+        }
+        //--------------------
+        if (enc1.isClick())
+        {
+          if (sndFlag)
+          {
+            sndFlag = false;                  // Заткнуть пищалку
+            currentMode = PAUSED;
+          }
+          else
+          {
+            resumeRun();
+            //currentMode = PAUSED;
+          }
+        }
+        //--------------------
+        if (enc1.isRight())
+        {
+          sndFlag = false;                  // Заткнуть пищалку
+        }
+        //--------------------
+        if (enc1.isLeft())
+        {
+          sndFlag = false;                  // Заткнуть пищалку
+        }
+        //--------------------
+      }
+      break;
+    //-------------------------------------------------------------
+    // Режим выбора разового объема -------------------------------
+    //-------------------------------------------------------------
+    case SELECT_VOL:
+      {
+        //--------------------
+        if (enc1.isHolded())
+        {
+          if (newDrinkVol)
+          {
+            drinkBackCounter = (uint32_t)drinkVolume * stepsForOneMl - 1;
+          }
+          newDrinkVol = false;
+          resumeRun();
+        }
+        //--------------------
+        if (enc1.isClick())
+        {
+          currentMode = PAUSED;
+          if (newDrinkVol)
+          {
+            drinkBackCounter = (uint32_t)drinkVolume * stepsForOneMl - 1;
+          }
+          newDrinkVol = false;
+          print_name(STRING_01);
+        }
+        //--------------------
+        if (enc1.isRight())
+        {
+          if (drinkVolume >= 1000) {
+            drinkVolume = drinkVolume + volBigStep;
+          } else {
+            if (drinkVolume >= 100) {
+              drinkVolume = drinkVolume + volMidStep;
+            } else {
+              drinkVolume = drinkVolume + volStep;
+            }
+          }
+          if (drinkVolume >= maxDrinkVol) drinkVolume = 5000;
+          print_drink_vol();
+          newDrinkVol = true;
+        }
+        //--------------------
+        if (enc1.isLeft())
+        {
+          if (drinkVolume >= (1000 + volBigStep)) {
+            drinkVolume = drinkVolume - volBigStep;
+          } else {
+            if (drinkVolume >= (100 + volMidStep)) {
+              drinkVolume = drinkVolume - volMidStep;
+            } else {
+              if(drinkVolume > volStep)drinkVolume = drinkVolume - volStep;
+              else drinkVolume = 0;
+            }
+          }
+          print_drink_vol();
+          newDrinkVol = true;
+        }
+        //--------------------
+      }
+      break;
+    //-------------------------------------------------------------
+    default:
+      //-------------------------------------------------
+      break;
+  }
+  //-------------------------------------------------
+}
+//---------------------- Конец основного цикла -----------------------------------------
+//--------------------------------------------------------------------------------------
+void resumeRun()
+{
+  #ifdef DS_PIN
+  if (temp_check_enable)print_name(STRING_20);
+  else print_name(STRING_00);
+  #else
+  print_name(STRING_00);
+  #endif
+  currentMode = RUNNING;
+  if (rate != 0)
+  {
+    stepEnabled = true;
+  }
+  else
+  {
+    stepEnabled = false;
+  }
+}
+//--------------------------------------------------------------------------------------
+// То, что выполняется каждую секунду --------------------------------------------------
+void oneSecSub()
+{
+  calcTotalVolume();
+  #ifdef DS_PIN
+  temp_check();
+  #endif
+  //Serial.println(String(stepsCount) + " " + String(totalVolume) + " " + String(timer1EndValue) + " " + drinkBackCounter);
+  if (currentMode < TUNING)
+  {
+    lcd.setCursor(11, 2);
+    lcd.print(formatNum((totalVolume % 100000), 5));
+    if (currentMode != SELECT_VOL)
+    {
+      if (drinkVolume != 0)
+      {
+        lcd.setCursor(11, 3);
+        lcd.print(formatNum((remainVolume % 100000), 5));
+      }
+      else
+      {
+        lcd.setCursor(11, 3);
+        lcd.print(" ----");
+      }
+    }
+  }
+  else
+  {
+    lcd.setCursor(15, 1);
+    lcd.print(formatNum((totalVolume % 100000), 5));
+  }
+}
+//--------------------------------------------------------------------------------------
+// То, что выполняется каждую десятую долю секунды -------------------------------------
+void oneTenthSub()
+{
+  if (currentMode < TUNING)
+  {
+    tmasStop = !digitalRead(TMAS);
+    //digitalWrite(13, tmasStop);
+    if ((sndFlag) and (tenth < 8))
+    {
+      if (bitRead(pattern, tenth))
+      {
+        digitalWrite(PIEZO, 0);
+        digitalWrite(LED, 0);
+      }
+      else
+      {
+        digitalWrite(PIEZO, 1);
+        digitalWrite(LED, 1);
+      }
+    }
+    else
+    {
+      digitalWrite(PIEZO, 1);
+      digitalWrite(LED, 1);
+    }
+  }
+  // ----------
+  else
+  {
+    lcd.setCursor(13, 2);
+    lcd.print(formatNum(stepsCount, 7));
+  }
+}
+//--------------------------------------------------------------------------------------
+// Прерывание таймера 2 (1000 раз в секунду) -------------------------------------------
+ISR_T2_COMPA
+{
+  enc1.tick();
+  thousandth++;                                         // Счетчик миллисекунд
+  if (thousandth >= 100)                                // Началась новая десятая доля секунды
+  { thousandth = 0; tenth++; newTenth = true;           // Счетчик десятых долей секунды
+    if (tenth >= 10) {
+      tenth = 0;  // Началась новая секунда
+      newSecond = true;
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------
+// Прерывание по совпадению А в таймере 1 ----------------------------------------------
+ISR_T1_COMPA
+{
+  if ((stepEnabled) or (!(stepEnabled) and !(digitalRead(STEP))))
+    // Если шаги разрешены или запрещены и уровень на тактовом выходе низкий, то:
+  {
+    digitalWrite(STEP, !digitalRead(STEP));   // Меняем уровень на шагательной ноге на противоположный
+    if (digitalRead(STEP))                    // Если был переход 0->1,
+    {
+      stepsCount++;                           // то увеличиваем счетчик шагов
+      TIMER1_COMPA_setValue(timer1EndValue);  // и перезагружаем значение сравнения счетчика.
+      if (drinkVolume != 0)                   // Если задан ненулевой объем наливайки
+      {
+        if (drinkBackCounter == 0)            // и налито, сколько запрошено,
+        {
+          stepEnabled = false;                // останавливаем отбор
+          drinkStop = true;                   // и устанавливаем флаг готовности дринка. (обрабатывается в основном цикле)
+        }
+        else
+        {
+          drinkBackCounter--;                 // Иначе уменьшаем дринковый счетчик.
+        }
+      }
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------
+// Расчет числа, загружаемого в OCR1A в зависимости от нужной скорости отбора ----------
+void calcOCR1A()
+{
+  stepEnabled = false;
+  // OCR1A = (Fcpu*3600)/(2*N*K*R)-1    // Fcpu = 16000000 Гц, N - количество шагов на 1 мл,
+                                       // K - делитель перед счетчиком Т1 (64), R - скорость отбора мл/час
+  //BaseOCR1A=(Fcpu*3600)/(2*N*K)      // вызываем calcBaseOCR1A() после изменения делителя или количество шагов на 1 мл(stepsForOneMl)
+  // OCR1A = BaseOCR1A/R -1
+  temp = round((float)BaseOCR1A / rate);             
+  temp = temp - 1;                             
+  if (temp >= 65535)
+  {
+    rate = 0;
+  }
+  else
+  {
+    noInterrupts();                               // Обеспечиваем атомарность действия
+    timer1EndValue = temp;                        //
+    interrupts();                                 // Восстанавливаем прерывания
+  }
+}
+//--------------------------------------------------------------------------------------
+// Пересчёт количества шагов в миллилитры ----------------------------------------------
+void calcTotalVolume()
+{
+  totalVolume = round((float)stepsCount / stepsForOneMl);
+  remainVolume = round((float)(drinkBackCounter + 1) / stepsForOneMl);
+}
+//--------------------------------------------------------------------------------------
+// Увеличение скорости отбора ----------------------------------------------------------
+void increaseRate()
+{
+  if (rate >= 1000) {
+    rate = rate + rateBigStep;
+  } else {
+    if (rate >= 200) {
+      rate = rate + rateMidStep;
+    } else {
+      rate = rate + rateStep;
+    }
+  }
+  if (rate >= maximumRate) rate = maximumRate;
+  calcOCR1A();
+}
+//--------------------------------------------------------------------------------------
+// Уменьшение скорости отбора ----------------------------------------------------------
+void decreaseRate()
+{
+  if (rate >= (1000 + rateBigStep)) {
+    rate = rate - rateBigStep;
+  } else {
+    if (rate >= (200 + rateMidStep)) {
+      rate = rate - rateMidStep;
+    } else {
+      rate = rate - rateStep;
+    }
+  }
+  if ((rate <= 0) or (rate > maximumRate)) 
+  {
+    rate = 0;
+  }
+  calcOCR1A();
+}
+//--------------------------------------------------------------------------------------
+void tryToSaveStepsFor100ml()
+{
+  counterA++;
+  if (counterA > 10)
+  {
+    counterA = 0;
+    if (stepsCount < minStepsFor100ml)
+    {
+      print_name(STRING_12);
+      delay(2000);
+      print_name(STRING_11);
+    }
+    else
+    {
+      if (stepsCount > maxStepsFor100ml)
+      {
+        print_name(STRING_13);
+        delay(2000);
+        print_name(STRING_11);
+      }
+      else
+      {
+        stepsCount = 100*(stepsCount/100);
+        EEPROM.put(0, stepsCount);
+        EEPROM.get(0, stepsFor100ml);
+        stepsForOneMl = round((float)stepsFor100ml / 100);
+        calcOCR1A();
+        rate = 0;
+        stepEnabled = false;
+        lcd.setCursor(13, 3);
+        lcd.print(formatNum(stepsFor100ml, 7));
+        print_name(STRING_14);
+        delay(2000);
+        print_name(STRING_11);
+        //setup();
+      }
+    }
+  }
+}
+//--------------------------------------------------------------------------------------
+String formatNum(uint32_t Number, int lenth)
+{
+  String temp = String(Number);
+  int j = temp.length();
+  String prefix = "";
+  for (int i = 0; i < lenth - j; i++)
+  {
+    prefix = " " + prefix;
+  }
+  String(temp1) = prefix + String(temp);
+  return temp1;
+}
+//--------------------------------------------------------------------------------------
+inline void print_name(String s)
+{
+  lcd.setCursor(0, 0);
+  lcd.print(s);
+}
+
+inline void print_tun_rate()
+{
+  lcd.setCursor(5, 1);
+  lcd.print(formatNum(rate, RATE_FMT));
+}
+inline void print_run_rate()
+{
+  lcd.setCursor(11, 1);
+  lcd.print(formatNum(rate, RATE_FMT));
+}
+inline void print_drink_vol()
+{
+  lcd.setCursor(11, 3);
+  lcd.print(formatNum(drinkVolume, DR_VOL_FMT));
+}
+inline void print_temp_pause()
+{
+  char buff[12];
+  String s;
+  dtostrf(curr_temp,4,1,&buff[0]);
+  //buff[5]=":";
+  s=String(buff)+":";
+  dtostrf(set_temp+ds_delta/10,4,1,buff);
+  s+=String(buff);
+  lcd.setCursor(10, 0);
+  lcd.print(s);
+}
+
+//--------------------------------------------------
+/* Recode russian fonts from UTF-8 to Windows-1251 */
+String utf8rus(String source)
+{
+  int i,k;
+  String target;
+  unsigned char n;
+  char m[2] = { '0', '\0' };
+
+  k = source.length(); i = 0;
+
+  while (i < k) {
+    n = source[i]; i++;
+
+    if (n >= 0xC0) {
+      switch (n) {
+        case 0xD0: {
+          n = source[i]; i++;
+          if (n == 0x81) { n = 0xA8; break; }
+          if (n >= 0x90 && n <= 0xBF) n = n + 0x30;
+          break;
+        }
+        case 0xD1: {
+          n = source[i]; i++;
+          if (n == 0x91) { n = 0xB8; break; }
+          if (n >= 0x80 && n <= 0x8F) n = n + 0x70;
+          break;
+        }
+      }
+    }
+    m[0] = n; target = target + String(m);
+  }
+return target;
+}
