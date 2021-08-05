@@ -20,18 +20,20 @@ SH1106Lib lcd;
 #include "uo.h"
 //--------------------------- Настройка железа ---------------------------------------------
 // Подключение энкодера
-#define SW2 A1                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
-#define SW1 A2                             // Сигнал энкодера 2 // можно поменять местами 
-#define KEY A0                             // Кнопка энкодера
+#define SW2 8                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
+#define SW1 7                             // Сигнал энкодера 2 // можно поменять местами 
+#define KEY 6                             // Кнопка энкодера
 Encoder enc1(SW1, SW2, KEY, TYPE2);
 
 // Подключение DRV8825
+#define DIR 2
 #define STEP 3                                // Тактовые импульсы на драйвер ШД
+#define DRV_EN 9
 
 // Внешнее управление
-#define TMAS  8                               // Сюда подключаем управление от TMAS, низкий уровень вызовет паузу
-#define PIEZO 7                               // Здесь пьезопищалка
-#define LED   6                               // Светодиод на панели
+#define TMAS  A0                              // Сюда подключаем управление от TMAS, низкий уровень вызовет паузу
+#define PIEZO A1                              // Здесь пьезопищалка
+#define LED   A2                              // Светодиод на панели
 #define soundA B00000101                      // Ритм автостопа
 #define soundB B01011101                     // Ритм внешнего стопа
 
@@ -214,12 +216,16 @@ void setup()
 {
   // Настройка входов и выходов
   pinMode(STEP, OUTPUT);
+  pinMode(DIR, OUTPUT);
+  pinMode(DRV_EN, OUTPUT);
   pinMode(PIEZO, OUTPUT);
   pinMode(LED, OUTPUT);
   pinMode(SW1,  INPUT_PULLUP);
   pinMode(SW2,  INPUT_PULLUP);
   pinMode(KEY,  INPUT_PULLUP);
   pinMode(TMAS, INPUT_PULLUP);
+  digitalWrite(DRV_EN, LOW);
+  digitalWrite(DIR, LOW);
   digitalWrite(STEP, 1);
   digitalWrite(PIEZO, 1);
   digitalWrite(LED, 1);
