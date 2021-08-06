@@ -232,6 +232,7 @@ void receiveEvent(int howMany)
 //--------------------------------------------------------------------------------------
 void setup()
 {
+  
   // Настройка входов и выходов
   pinMode(STEP, OUTPUT);
   pinMode(DIR, OUTPUT);
@@ -258,7 +259,25 @@ void setup()
   driver.semax(2);
   driver.sedn(0b01);
   driver.SGTHRS(STALL_VALUE);
-
+/*
+    Serial.begin(115200);
+    Serial.print(F("\nTesting connection..."));
+    uint8_t result = driver.test_connection();
+    if (result) {
+        Serial.println(F("failed!"));
+        Serial.print(F("Likely cause: "));
+        switch(result) {
+            case 1: Serial.println(F("loose connection")); break;
+            case 2: Serial.println(F("Likely cause: no power")); break;
+        }
+        Serial.println(F("Fix the problem and reset board."));
+        abort();
+    }
+    Serial.println(F("OK"));
+    Serial.println(driver.microsteps());
+    Serial.println(driver.rms_current());
+*/
+    driver.push();
   // Настройка таймера 1, он задаёт частоту шагания двигателя
   TIMER1_setClock(T1ClockDivider);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8
   TIMER1_setMode(CTC_MODE);                 // Режим работы таймера - сравнение со значением, прерывание и рестарт
