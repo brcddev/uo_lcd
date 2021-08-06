@@ -198,6 +198,8 @@ void receiveEvent(int howMany)
             rate = maximumRate;
           calcOCR1A();
           resumeRun();
+          lcd.setCursor(rpVal, 1*yFONT);
+          lcd.print(formatNum(rate, 5));
         }
         break;
 
