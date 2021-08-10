@@ -19,6 +19,7 @@ SH1106Lib lcd;
 #include "Wire.h"
 #include <TMCStepper.h>
 #include "uo.h"
+#define START_ACCEL 2000
 #define STEP_PIN         3 // Step
 #define SW_RX            4 // TMC2208/TMC2224 SoftwareSerial receive pin
 #define SW_TX            5 // TMC2208/TMC2224 SoftwareSerial transmit pin
@@ -127,6 +128,9 @@ volatile bool          sndFlag        = false;
 #define STRING_14 "-- 100 ml UPDATED --"  //  
 #define STRING_15 "--  Total ZEROED  --"  //  
 //--------------------------------------------------------------------------------------
+bool flagAcceleration=false;
+uint16_t rateAcceleration=START_ACCEL;
+uint16_t new_rate;
 //void calcOCR1A();
 String formatNum(uint32_t Number, int lenth);
 void tryToSaveStepsFor100ml();
@@ -345,6 +349,22 @@ void loop()
   if (newTenth)  {
     newTenth = false;
     oneTenthSub();
+    if (flagAcceleration){
+      if(rate>=new_rate){
+        flagAcceleration=false;
+        rate=new_rate;
+
+      }
+      else{
+        rate+=200;
+        if(rate>=new_rate){
+          rate=new_rate;
+          flagAcceleration=false;
+        }
+      }
+      calcOCR1A();
+      stepEnabled = true;
+    }    
   }
   //---------------------------------------------------------------
   switch (currentMode)
@@ -785,6 +805,17 @@ void resumeRun()
   lcd.setCursor(0, 0);
   lcd.print(STRING_00);
   currentMode = RUNNING;
+    if (!flagAcceleration){
+      if (rate>START_ACCEL){
+        flagAcceleration=true;
+        new_rate=rate;
+        rate=START_ACCEL;
+        calcOCR1A();
+      }
+      else{
+        flagAcceleration=false;
+      }
+    }  
   if (rate != 0)
   {
     stepEnabled = true;
@@ -810,6 +841,7 @@ void tryToTune()
 // Установить максимальную скорость отбора
 void setMaximumRate()
 {
+  if (flagAcceleration)return;
   rate = maximumRate;
   calcOCR1A();
   lcd.setCursor(rpVal, 1*yFONT);
@@ -819,6 +851,7 @@ void setMaximumRate()
 // Установить отбор = 0
 void setMinimumRate()
 {
+  if (flagAcceleration)return;
   rate = 0;
   calcOCR1A();
   lcd.setCursor(rpVal, 1*yFONT);
@@ -828,6 +861,7 @@ void setMinimumRate()
 // Увеличение скорости отбора ----------------------------------------------------------
 void increaseRate()
 {
+  if (flagAcceleration)return;
   if (rate >= 1000) {
     rate = rate + rateBigStep;
   } else {
@@ -844,6 +878,7 @@ void increaseRate()
 // Уменьшение скорости отбора ----------------------------------------------------------
 void decreaseRate()
 {
+  if (flagAcceleration)return;
   if (rate >= (1000 + rateBigStep)) {
     rate = rate - rateBigStep;
   } else {
