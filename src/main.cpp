@@ -39,8 +39,8 @@ TMC2209Stepper driver(SW_RX, SW_TX, R_SENSE, DRIVER_ADDRESS);
 using namespace TMC2208_n;
 //--------------------------- Настройка железа ---------------------------------------------
 // Подключение энкодера
-#define SW2 8                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
-#define SW1 7                             // Сигнал энкодера 2 // можно поменять местами 
+#define SW2 7                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
+#define SW1 8                            // Сигнал энкодера 2 // можно поменять местами 
 #define KEY 6                             // Кнопка энкодера
 Encoder enc1(SW1, SW2, KEY, TYPE2);
 
@@ -71,7 +71,7 @@ Encoder enc1(SW1, SW2, KEY, TYPE2);
 //----------------------------------------------
 // Константы
 //----------------------------------------------
-#define maximumRate           5000            //  Максимальная скорость отбора мл/час
+#define maximumRate           4500            //  Максимальная скорость отбора мл/час
 #define rateStep              10              //  Мелкий шаг регулировки отбора
 #define rateMidStep           50              //  Средний шаг регулировки отбора
 #define rateBigStep           100             //  Крупный шаг регулировки отбора
@@ -151,6 +151,7 @@ void  tryToTune();
 
 
 void pauseRun(){
+  digitalWrite(DRV_EN, HIGH);
   stepEnabled = false;
   currentMode = PAUSED;
   lcd.setCursor(0, 0);
@@ -258,7 +259,7 @@ void setup()
   driver.begin();
   driver.toff(4);
   driver.blank_time(24);
-  driver.rms_current(1000); // mA
+  driver.rms_current(1200); // mA
   driver.microsteps(8);
   driver.TCOOLTHRS(0xFFFFF); // 20bit max
   driver.semin(5);
@@ -802,6 +803,7 @@ void loop()
 //--------------------------------------------------------------------------------------
 void resumeRun()
 {
+  digitalWrite(DRV_EN, LOW);
   lcd.setCursor(0, 0);
   lcd.print(STRING_00);
   currentMode = RUNNING;
