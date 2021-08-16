@@ -211,7 +211,7 @@ void receiveEvent(int howMany)
         case DOZER_SET_TOTAL_VOLUME:
         {
           totalVolume = cmd.val;
-          stepsCount = totalVolume / stepsForOneMl; //dz.totalVolume = stepsCount / stepsForOneMl;
+          stepsCount = totalVolume * stepsForOneMl; 
         }
         break;
 
