@@ -192,7 +192,7 @@ void receiveEvent(int howMany)
         case DOZER_SET_DRINK_VOLUME:
         {
           drinkVolume=cmd.val;
-          drinkBackCounter = (uint32_t)(drinkVolume * stepsForOneMl - 1);
+          drinkBackCounter = (uint32_t)drinkVolume * (uint32_t)stepsForOneMl - 1;
         }
         break;
 
