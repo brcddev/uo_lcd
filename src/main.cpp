@@ -210,8 +210,8 @@ void receiveEvent(int howMany)
 
         case DOZER_SET_TOTAL_VOLUME:
         {
-          totalVolume = cmd.val;
-          stepsCount = totalVolume * stepsForOneMl; 
+          totalVolume = (uint16_t)cmd.val;
+          stepsCount = (uint32_t)totalVolume * (uint32_t)stepsForOneMl; 
         }
         break;
 
@@ -336,7 +336,7 @@ void setup()
   else {
     currentMode = RUNNING;
     printMainScreen();
-  }
+  } 
 }
 //--------------------------------------------------------------------------------------
 //---------------------- Начало основного цикла ----------------------------------------
