@@ -1,3 +1,4 @@
+#include "config.h"
 //пины подключения настраиваем в файле LCDSoftI2C.cpp
 #define I2C_PULLUP 1
 #define I2C_FASTMODE 1
@@ -19,45 +20,13 @@ SH1106Lib lcd;
 #include "Wire.h"
 #include <TMCStepper.h>
 #include "uo.h"
-#define START_ACCEL 2000
-#define STEP_PIN         3 // Step
-#define SW_RX            4 // TMC2208/TMC2224 SoftwareSerial receive pin
-#define SW_TX            5 // TMC2208/TMC2224 SoftwareSerial transmit pin
-#define STALL_VALUE     100 // [0..255]
-#define DRIVER_ADDRESS 0b00 // TMC2209 Driver address according to MS1 and MS2
-
-#define R_SENSE 0.11f // Match to your driver
-                      // SilentStepStick series use 0.11
-                      // UltiMachine Einsy and Archim2 boards use 0.2
-                      // Panucatt BSD2660 uses 0.1
-                      // Watterott TMC5160 uses 0.075
 
 // Select your stepper driver type
 //TMC2209Stepper driver(&SERIAL_PORT, R_SENSE, DRIVER_ADDRESS);
 TMC2209Stepper driver(SW_RX, SW_TX, R_SENSE, DRIVER_ADDRESS);
 
 using namespace TMC2208_n;
-//--------------------------- Настройка железа ---------------------------------------------
-// Подключение энкодера
-#define SW2 7                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
-#define SW1 8                            // Сигнал энкодера 2 // можно поменять местами 
-#define KEY 6                             // Кнопка энкодера
 Encoder enc1(SW1, SW2, KEY, TYPE2);
-
-// Подключение DRV8825
-#define DIR 2
-#define STEP 3                                // Тактовые импульсы на драйвер ШД
-#define DRV_EN 9
-
-// Внешнее управление
-#define TMAS  A0                              // Сюда подключаем управление от TMAS, низкий уровень вызовет паузу
-#define PIEZO A1                              // Здесь пьезопищалка
-#define LED   A2                              // Светодиод на панели
-#define soundA B00000101                      // Ритм автостопа
-#define soundB B01011101                     // Ритм внешнего стопа
-
-
-
 //--------------------------------------------------------------------------------------
 // Наименования режимов работы
 //----------------------------------------------
@@ -146,9 +115,21 @@ void printMainScreen();
 void printValues();
 void setMaximumRate();
 void setMinimumRate();
-void  tryToTune();
+void tryToTune();
 //--------------------------------------------------------------------------------------
 
+//MIN_RATE минимальный отбор тела, ниже не опускаемся
+#ifdef AUTO_RATE //процент уменьшения отбора
+void auto_rate(){
+  uint16_t dec_rate;
+  if (rate > MIN_RATE){ //пропускаем головы и подголовки 
+    dec_rate=rate/100*AUTO_RATE;
+    if ((rate-dec_rate)<MIN_RATE)rate=MIN_RATE;
+    else rate-=dec_rate; 
+    calcOCR1A();
+  }
+}
+#endif
 
 void pauseRun(){
   digitalWrite(DRV_EN, HIGH);
@@ -630,6 +611,9 @@ void loop()
         if (!tmasStop)
         {
           sndFlag = false;
+          #ifdef AUTO_RATE
+          auto_rate();
+          #endif
           resumeRun();
         }
         //--------------------
