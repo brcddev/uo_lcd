@@ -117,7 +117,34 @@ void setMaximumRate();
 void setMinimumRate();
 void tryToTune();
 //--------------------------------------------------------------------------------------
-
+//***Функция считывания температуры c Далласов*****
+void dallRead(unsigned long interval){
+  static unsigned long prevTime = 0;
+  if (millis() - prevTime > interval) { //Проверка заданного интервала
+  static boolean flagDall = 0; //Признак операции
+  prevTime = millis();
+  flagDall =! flagDall; //Инверсия признака
+  if (flagDall) {
+    ds.reset();
+    ds.write(0xCC); //Обращение ко всем датчикам
+    ds.write(0x44); //Команда на конвертацию
+    flagDallRead = 1; //Время возврата в секундах
+  }
+  else {
+    byte i;
+     int temp;
+    for (i = 0; i < 3; i++){ //Перебор количества датчиков
+     ds.reset();
+     ds.select(addr[i]);
+     ds.write(0xBE); //Считывание значения с датчика
+     temp = (ds.read() | ds.read()<<8); //Принимаем два байта температуры
+     Temp[i] = (float)temp / 16.0; 
+     flagDallRead = 2; //Время возврата в секундах
+     }
+   }
+  }
+}
+//--------------------------------------------------
 //MIN_RATE минимальный отбор тела, ниже не опускаемся
 #ifdef AUTO_RATE //процент уменьшения отбора
 void auto_rate(){
