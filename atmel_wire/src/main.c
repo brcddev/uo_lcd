@@ -1,12 +1,6 @@
 #include <Arduino.h>
 
-void setup() {
-  // put your setup code here, to run once:
-}
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
 
 // This file has been prepared for Doxygen automatic documentation generation.
 /*! \file ********************************************************************
@@ -58,37 +52,6 @@ extern OWIflags OWIStatus;
 extern unsigned char *OWIDataBuffer;
 
 signed int temperature;
-
-
-/*! \brief  Code example for the interrupt-driven driver.
- *
- *  This code example assumes that there is a DS1820 temperature sensor
- *  connected to the 1-Wire bus. The temperature sensor is continously 
- *  polled, and the temperature reading is output to PORTB.
- */
-void main2(void)
-{  
-    
-    OWI_Init();    
-    
-    //__enable_interrupt();
-    
-    // Configure PORTB as output. This can be used to output debugging values
-    // to the LEDs on the STK500 development board.
-    DDRB = 0xff;
-    
-    for(;;)
-    {
-        // If the 1-Wire(R) bus is not busy, run the state machine.
-        if (!OWIStatus.busy)
-        {
-            OWI_StateMachine();    
-        }        
-
-        // Do something else while 1-Wire(R) bus is busy.
-        PORTB = ~(temperature >> 1);
-    }
-}
 
 
 /*! \brief  The state machine that controls communication on the 1-Wire bus
@@ -223,3 +186,15 @@ void OWI_StateMachine()
     }
 }
 
+void setup() {
+  // put your setup code here, to run once:
+  OWI_Init(); 
+}
+
+void loop() {
+        // If the 1-Wire(R) bus is not busy, run the state machine.
+        if (!OWIStatus.busy)
+        {
+            OWI_StateMachine();    
+        } 
+}
