@@ -14,12 +14,15 @@
 #define tRate 30
 #define tpVal 75
 SH1106Lib lcd;
+#include <U8g2lib.h>
 #include <EEPROM.h>                           // Стандартная библиотека
 #include "GyverEncoder.h"                     // Библиотеки с сайта 
 #include "directTimers.h"                     // https://codeload.github.com/AlexGyver/GyverLibs/zip/master
 #include "Wire.h"
 #include <TMCStepper.h>
 #include "uo.h"
+
+U8G2_SSD1309_128X64_NONAME2_1_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ 13, /* data=*/ 11, /* cs=*/ 10, /* dc=*/ 9, /* reset=*/ 8);
 
 // Select your stepper driver type
 //TMC2209Stepper driver(&SERIAL_PORT, R_SENSE, DRIVER_ADDRESS);
@@ -117,33 +120,6 @@ void setMaximumRate();
 void setMinimumRate();
 void tryToTune();
 //--------------------------------------------------------------------------------------
-//***Функция считывания температуры c Далласов*****
-void dallRead(unsigned long interval){
-  static unsigned long prevTime = 0;
-  if (millis() - prevTime > interval) { //Проверка заданного интервала
-  static boolean flagDall = 0; //Признак операции
-  prevTime = millis();
-  flagDall =! flagDall; //Инверсия признака
-  if (flagDall) {
-    ds.reset();
-    ds.write(0xCC); //Обращение ко всем датчикам
-    ds.write(0x44); //Команда на конвертацию
-    flagDallRead = 1; //Время возврата в секундах
-  }
-  else {
-    byte i;
-     int temp;
-    for (i = 0; i < 3; i++){ //Перебор количества датчиков
-     ds.reset();
-     ds.select(addr[i]);
-     ds.write(0xBE); //Считывание значения с датчика
-     temp = (ds.read() | ds.read()<<8); //Принимаем два байта температуры
-     Temp[i] = (float)temp / 16.0; 
-     flagDallRead = 2; //Время возврата в секундах
-     }
-   }
-  }
-}
 //--------------------------------------------------
 //MIN_RATE минимальный отбор тела, ниже не опускаемся
 #ifdef AUTO_RATE //процент уменьшения отбора
@@ -247,7 +223,8 @@ void receiveEvent(int howMany)
 //--------------------------------------------------------------------------------------
 void setup()
 {
-  
+  u8g2.begin();
+  u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print()
   // Настройка входов и выходов
   pinMode(STEP, OUTPUT);
   pinMode(DIR, OUTPUT);

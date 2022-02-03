@@ -37,7 +37,7 @@
 
 
 //DS18B29
-#define DS_PIN
+//#define DS_PIN
 #define DS_ALARM_TIME (10*60*1000L)    //время , после которого в режиме стопа по температуре включает пищалку
 #define DS_TIME_CHECK 1500
 #endif //_CONFIG_H_
