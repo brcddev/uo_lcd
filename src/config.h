@@ -5,19 +5,19 @@
 #define AUTO_RATE 7 //процент уменьшения отбора после внешнего стопа.
 #define MIN_RATE 1000 //минимальный отбор тела, ниже которого не снижаемся
  
-// Подключение энкодера
-#define SW2 7                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
-#define SW1 8                            // Сигнал энкодера 2 // можно поменять местами 
-#define KEY 6                             // Кнопка энкодера                             // Кнопка энкодера
-
 // Подключение TMC2209
 #define DIR 2
 #define STEP 3                                // Тактовые импульсы на драйвер ШД
-#define DRV_EN 9                               // Тактовые импульсы на драйвер ШД
-#define START_ACCEL 2000
 #define STEP_PIN         3 // Step
 #define SW_RX            4 // TMC2208/TMC2224 SoftwareSerial receive pin
 #define SW_TX            5 // TMC2208/TMC2224 SoftwareSerial transmit pin
+// Подключение энкодера
+#define KEY 6                             // Кнопка энкодера    
+#define SW2 7                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
+#define SW1 8                            // Сигнал энкодера 2 // можно поменять местами 
+#define DRV_EN 9                               // Тактовые импульсы на драйвер ШД
+#define START_ACCEL 2000
+
 #define STALL_VALUE     100 // [0..255]
 #define DRIVER_ADDRESS 0b00 // TMC2209 Driver address according to MS1 and MS2
 
