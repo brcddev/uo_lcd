@@ -14,7 +14,7 @@
 #define tRate 30
 #define tpVal 75
 SH1106Lib lcd;
-#include <U8g2lib.h>
+//#include <U8g2lib.h>
 #include <EEPROM.h>                           // Стандартная библиотека
 #include "GyverEncoder.h"                     // Библиотеки с сайта 
 #include "directTimers.h"                     // https://codeload.github.com/AlexGyver/GyverLibs/zip/master
@@ -22,7 +22,7 @@ SH1106Lib lcd;
 #include <TMCStepper.h>
 #include "uo.h"
 
-U8G2_SSD1309_128X64_NONAME2_1_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ 13, /* data=*/ 11, /* cs=*/ 10, /* dc=*/ A0, /* reset=*/ A1);
+//U8G2_SSD1309_128X64_NONAME2_1_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ 13, /* data=*/ 11, /* cs=*/ 10, /* dc=*/ A0, /* reset=*/ A1);
 
 // Select your stepper driver type
 //TMC2209Stepper driver(&SERIAL_PORT, R_SENSE, DRIVER_ADDRESS);
@@ -223,8 +223,8 @@ void receiveEvent(int howMany)
 //--------------------------------------------------------------------------------------
 void setup()
 {
-  u8g2.begin();
-  u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print()
+  //u8g2.begin();
+  //u8g2.enableUTF8Print();		// enable UTF8 support for the Arduino print()
   // Настройка входов и выходов
   pinMode(STEP, OUTPUT);
   pinMode(DIR, OUTPUT);
@@ -244,14 +244,15 @@ void setup()
   driver.begin();
   driver.toff(4);
   driver.blank_time(24);
-  driver.rms_current(1200); // mA
-  driver.microsteps(8);
+  //driver.rms_current(1200); // mA
+   driver.rms_current(RMS_CURRENT); // mA
+  driver.microsteps(MICROSTEPS);//8
   driver.TCOOLTHRS(0xFFFFF); // 20bit max
   driver.semin(5);
   driver.semax(2);
   driver.sedn(0b01);
   driver.SGTHRS(STALL_VALUE);
-/*
+
     Serial.begin(115200);
     Serial.print(F("\nTesting connection..."));
     uint8_t result = driver.test_connection();
@@ -268,7 +269,7 @@ void setup()
     Serial.println(F("OK"));
     Serial.println(driver.microsteps());
     Serial.println(driver.rms_current());
-*/
+
     driver.push();
   // Настройка таймера 1, он задаёт частоту шагания двигателя
   TIMER1_setClock(T1ClockDivider);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8

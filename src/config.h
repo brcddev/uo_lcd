@@ -4,13 +4,15 @@
 
 #define AUTO_RATE 7 //процент уменьшения отбора после внешнего стопа.
 #define MIN_RATE 1000 //минимальный отбор тела, ниже которого не снижаемся
+#define RMS_CURRENT 1200
+#define MICROSTEPS 8
  
 // Подключение TMC2209
 #define DIR 2
 #define STEP 3                                // Тактовые импульсы на драйвер ШД
 #define STEP_PIN         3 // Step
-#define SW_RX            4 // TMC2208/TMC2224 SoftwareSerial receive pin
-#define SW_TX            5 // TMC2208/TMC2224 SoftwareSerial transmit pin
+#define SW_RX            5 // TMC2208/TMC2224 SoftwareSerial receive pin
+#define SW_TX            4 // 1kOm TMC2208/TMC2224 SoftwareSerial transmit pin
 // Подключение энкодера
 #define KEY 6                             // Кнопка энкодера    
 #define SW2 7                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
@@ -38,6 +40,6 @@
 
 //DS18B29
 //#define DS_PIN
-#define DS_ALARM_TIME (10*60*1000L)    //время , после которого в режиме стопа по температуре включает пищалку
-#define DS_TIME_CHECK 1500
+//#define DS_ALARM_TIME (10*60*1000L)    //время , после которого в режиме стопа по температуре включает пищалку
+//#define DS_TIME_CHECK 1500
 #endif //_CONFIG_H_
