@@ -10,7 +10,7 @@
  
 // Подключение TMC2209
 #define DIR 2
-#define STEP 3                                // Тактовые импульсы на драйвер ШД
+#define STEP 3      // PD3 Тактовые импульсы на драйвер ШД
 #define SW_TX            4 // 1kOm TMC2208/TMC2224 SoftwareSerial transmit pin
 #define SW_RX            5 // TMC2208/TMC2224 SoftwareSerial receive pin
 
