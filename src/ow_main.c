@@ -24,6 +24,8 @@
 ****************************************************************************/
 #define __ATmega32__
 #define __AVR_ATmega328p__
+#include "config.h"
+#ifdef USE_DS18B20
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -205,3 +207,5 @@ void ow_loop() {
             OWI_StateMachine();    
         } 
 }
+
+#endif

@@ -63,7 +63,7 @@ Encoder enc1(SW1, SW2, KEY, TYPE2);
 #define volBigStep            500             //  Крупный шаг регулировки дозатора
 #define maxDrinkVol           10000            //  Максимальный объем, выдаваемый дозатором
 #define defaultDrink          0               //  Объем дозатора по умолчанию. 0 - без ограничения.
-#define defaultpValsFor100ml  150000          //  Количество шагов потребное для отбора 100 мл по умолчанию при шаге/8
+#define defaultpValsFor100ml  600000          //  Количество шагов потребное для отбора 100 мл по умолчанию при шаге/8
 #define minStepsFor100ml      50000          //  Минимально возможное число шагов для отбора 100 мл при шаге/8
 #define maxStepsFor100ml      1500000
 //----------------------------------------------
@@ -134,8 +134,31 @@ void printValues();
 void setMaximumRate();
 void setMinimumRate();
 void tryToTune();
+uint16_t prescalers[]={0,1,8,64,256,1024};
 //--------------------------------------------------------------------------------------
+//void calcBaseOCR1A(){
+  //
+  //uint8_t prescaler=TCCR1B &((1 << CS12) | (1 << CS11) | (1 << CS10));
+  //BaseOCR1A=round((float)F_CPU*3600/2/prescalers[prescaler]/ stepsForOneMl);
+//}
 //--------------------------------------------------
+inline void print_state2()
+{
+  char buff[12];
+  float data;
+  String s;
+  if (!driver.test_connection()){
+  data = (float)driver.rms_current()/1000;
+  dtostrf(data,3,1,&buff[0]);
+  s=String(buff)+":";
+  s=s+formatNum(driver.microsteps(),3)+":";
+  }else{
+    s="drv ERR:";
+  }
+  s=s+String(prescalers[(uint8_t)TCCR1B &((1 << CS12) | (1 << CS11) | (1 << CS10))])+":";
+  lcd.setCursor(0, 4*yFONT);
+  lcd.print(s);
+}
 inline void print_name(String s)
 {
   lcd.setCursor(0, 0);
@@ -179,7 +202,10 @@ inline void print_temp_pause()
   lcd.setCursor(10, 0);
   lcd.print(s);
 }
+
 #endif
+
+
 void pauseRun(){
   digitalWrite(DRV_EN, HIGH);
   stepEnabled = false;
@@ -305,7 +331,8 @@ void setup()
   driver.semax(2);
   driver.sedn(0b01);
   driver.SGTHRS(STALL_VALUE);
-/*
+  driver.push();
+  /*
     Serial.begin(115200);
     Serial.print(F("\nTesting connection..."));
     uint8_t result = driver.test_connection();
@@ -323,7 +350,7 @@ void setup()
     Serial.println(driver.microsteps());
     Serial.println(driver.rms_current());
 */
-    driver.push();
+    
   // Настройка таймера 1, он задаёт частоту шагания двигателя
   TIMER1_setClock(T1ClockDivider);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8
   TIMER1_setMode(CTC_MODE);                 // Режим работы таймера - сравнение со значением, прерывание и рестарт
@@ -376,6 +403,7 @@ void setup()
     currentMode = RUNNING;
     printMainScreen();
   } 
+  Serial.println(stepsFor100ml);
 }
 //--------------------------------------------------------------------------------------
 //---------------------- Начало основного цикла ----------------------------------------
