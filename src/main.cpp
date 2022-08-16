@@ -21,6 +21,9 @@ SH1106Lib lcd;
 #include "Wire.h"
 #include <TMCStepper.h>
 #include "uo.h"
+#ifdef USE_DS18B20
+#include "ow_main.h"
+#endif
 
 //U8G2_SSD1309_128X64_NONAME2_1_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ 13, /* data=*/ 11, /* cs=*/ 10, /* dc=*/ A0, /* reset=*/ A1);
 
@@ -240,6 +243,10 @@ void setup()
   digitalWrite(STEP, 1);
   digitalWrite(PIEZO, 1);
   digitalWrite(LED, 1);
+
+  #ifdef USE_DS18B20
+  ow_setup();
+  #endif
   //drv
   driver.begin();
   driver.toff(4);
@@ -252,7 +259,7 @@ void setup()
   driver.semax(2);
   driver.sedn(0b01);
   driver.SGTHRS(STALL_VALUE);
-
+/*
     Serial.begin(115200);
     Serial.print(F("\nTesting connection..."));
     uint8_t result = driver.test_connection();
@@ -269,7 +276,7 @@ void setup()
     Serial.println(F("OK"));
     Serial.println(driver.microsteps());
     Serial.println(driver.rms_current());
-
+*/
     driver.push();
   // Настройка таймера 1, он задаёт частоту шагания двигателя
   TIMER1_setClock(T1ClockDivider);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8
@@ -284,7 +291,7 @@ void setup()
   TIMER2_attach_COMPA();                    // прерывание с опросом энкодера
   //
   // Настройка дисплея
-    lcd.initialize();
+  lcd.initialize();
   lcd.clearDisplay();
 
   lcd.setFont(font, 5, 7);
@@ -329,6 +336,10 @@ void setup()
 void loop()
 {
   if (TWAR != TWI_SA) TWAR = TWI_SA;
+  #ifdef USE_DS18B20  
+  ow_loop();
+  #endif 
+
   if (newSecond) {
     newSecond = false;
     oneSecSub();

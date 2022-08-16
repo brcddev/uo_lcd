@@ -186,12 +186,12 @@ void OWI_StateMachine()
     }
 }
 
-void setup() {
+void ow_setup() {
   // put your setup code here, to run once:
   OWI_Init(); 
 }
 
-void loop() {
+void ow_loop() {
         // If the 1-Wire(R) bus is not busy, run the state machine.
         if (!OWIStatus.busy)
         {

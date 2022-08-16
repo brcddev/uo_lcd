@@ -1,0 +1,327 @@
+[
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/CDC.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/CDC.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/CDC.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/HardwareSerial.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/HardwareSerial0.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial0.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial0.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/HardwareSerial1.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial1.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial1.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/HardwareSerial2.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial2.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial2.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/HardwareSerial3.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial3.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/HardwareSerial3.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/IPAddress.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/IPAddress.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/IPAddress.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/PluggableUSB.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/PluggableUSB.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/PluggableUSB.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/Print.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/Print.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/Print.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/Stream.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/Stream.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/Stream.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/Tone.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/Tone.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/Tone.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/USBCore.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/USBCore.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/USBCore.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/FrameworkArduino/WInterrupts.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/WInterrupts.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/WInterrupts.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/WMath.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/WMath.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/WMath.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/WString.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/WString.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/WString.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/abi.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/abi.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/abi.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/FrameworkArduino/hooks.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/hooks.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/hooks.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/main.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/main.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/main.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/FrameworkArduino/new.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/new.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/new.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/FrameworkArduino/wiring.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/FrameworkArduino/wiring_analog.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_analog.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_analog.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/FrameworkArduino/wiring_digital.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_digital.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_digital.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-as -mmcu=atmega328p -o .pio/build/uno/FrameworkArduino/wiring_pulse.S.o /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.S",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.S"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/FrameworkArduino/wiring_pulse.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_pulse.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/FrameworkArduino/wiring_shift.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_shift.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino/wiring_shift.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib781/OneWire/OneWire.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I.pio/libdeps/uno/OneWire -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard .pio/libdeps/uno/OneWire/OneWire.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/.pio/libdeps/uno/OneWire/OneWire.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib33a/GyverEncoder/GyverEncoder.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/GyverEncoder -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/GyverEncoder/GyverEncoder.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/GyverEncoder/GyverEncoder.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib093/Wire/Wire.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src/Wire.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src/Wire.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/lib093/Wire/utility/twi.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src/utility/twi.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src/utility/twi.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib4c4/directTimers/directTimers.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/directTimers -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/directTimers/directTimers.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/directTimers/directTimers.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib22a/SPI/SPI.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src/SPI.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src/SPI.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/libc38/SoftwareSerial/SoftwareSerial.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard /home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src/SoftwareSerial.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src/SoftwareSerial.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/CHOPCONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/CHOPCONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/CHOPCONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/COOLCONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/COOLCONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/COOLCONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/DRVCONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/DRVCONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/DRVCONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/DRVCTRL.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/DRVCTRL.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/DRVCTRL.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/DRVSTATUS.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/DRVSTATUS.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/DRVSTATUS.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/DRV_CONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/DRV_CONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/DRV_CONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/DRV_STATUS.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/DRV_STATUS.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/DRV_STATUS.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/ENCMODE.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/ENCMODE.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/ENCMODE.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/GCONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/GCONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/GCONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/IHOLD_IRUN.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/IHOLD_IRUN.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/IHOLD_IRUN.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/PWMCONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/PWMCONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/PWMCONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/RAMP_STAT.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/RAMP_STAT.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/RAMP_STAT.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/SERIAL_SWITCH.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/SERIAL_SWITCH.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/SERIAL_SWITCH.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/SGCSCONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/SGCSCONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/SGCSCONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/SHORT_CONF.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/SHORT_CONF.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/SHORT_CONF.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/SMARTEN.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/SMARTEN.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/SMARTEN.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/SW_MODE.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/SW_MODE.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/SW_MODE.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/SW_SPI.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/SW_SPI.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/SW_SPI.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMC2130Stepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMC2130Stepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMC2130Stepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMC2160Stepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMC2160Stepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMC2160Stepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMC2208Stepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMC2208Stepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMC2208Stepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMC2209Stepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMC2209Stepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMC2209Stepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMC2660Stepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMC2660Stepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMC2660Stepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMC5130Stepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMC5130Stepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMC5130Stepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMC5160Stepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMC5160Stepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMC5160Stepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/TMCStepper.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/TMCStepper.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/TMCStepper.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/bcm2835_spi.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/bcm2835_spi.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/bcm2835_spi.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/lib363/TMCStepper-0.7.3/source/bcm2835_stream.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard lib/TMCStepper-0.7.3/src/source/bcm2835_stream.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/lib/TMCStepper-0.7.3/src/source/bcm2835_stream.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/src/OWIIntFunctions.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -Ilib/SH1106Lib -Ilib/TinyPrint -Ilib/SoftI2CMaster/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src -Ilib/directTimers -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -Ilib/GyverEncoder -I.pio/libdeps/uno/OneWire -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard src/OWIIntFunctions.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/src/OWIIntFunctions.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/src/common_files/OWIcrc.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -Ilib/SH1106Lib -Ilib/TinyPrint -Ilib/SoftI2CMaster/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src -Ilib/directTimers -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -Ilib/GyverEncoder -I.pio/libdeps/uno/OneWire -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard src/common_files/OWIcrc.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/src/common_files/OWIcrc.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/uno/src/main.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++11 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -Ilib/SH1106Lib -Ilib/TinyPrint -Ilib/SoftI2CMaster/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src -Ilib/directTimers -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -Ilib/GyverEncoder -I.pio/libdeps/uno/OneWire -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard src/main.cpp",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/src/main.cpp"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/src/ow_main.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -Ilib/SH1106Lib -Ilib/TinyPrint -Ilib/SoftI2CMaster/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src -Ilib/directTimers -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -Ilib/GyverEncoder -I.pio/libdeps/uno/OneWire -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard src/ow_main.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/src/ow_main.c"
+    },
+    {
+        "command": "/home/brc/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/uno/src/uo.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60002 -DARDUINO_AVR_UNO -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -Ilib/TMCStepper-0.7.3/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/SPI/src -Ilib/SH1106Lib -Ilib/TinyPrint -Ilib/SoftI2CMaster/src -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src -Ilib/directTimers -I/home/brc/.platformio/packages/framework-arduino-avr/libraries/Wire/src -Ilib/GyverEncoder -I.pio/libdeps/uno/OneWire -I/home/brc/.platformio/packages/framework-arduino-avr/cores/arduino -I/home/brc/.platformio/packages/framework-arduino-avr/variants/standard src/uo.c",
+        "directory": "/home/brc/uo_lcd",
+        "file": "/home/brc/uo_lcd/src/uo.c"
+    }
+]

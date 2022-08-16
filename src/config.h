@@ -1,6 +1,7 @@
 #ifndef _CONFIG_H_ 
 #define _CONFIG_H_
 
+#define USE_DS18B20
 
 #define AUTO_RATE 7 //процент уменьшения отбора после внешнего стопа.
 #define MIN_RATE 1000 //минимальный отбор тела, ниже которого не снижаемся
@@ -38,8 +39,8 @@
                               // Светодиод на панели
 
 
-//DS18B29
-//#define DS_PIN
+ 
+
 //#define DS_ALARM_TIME (10*60*1000L)    //время , после которого в режиме стопа по температуре включает пищалку
 //#define DS_TIME_CHECK 1500
 #endif //_CONFIG_H_
