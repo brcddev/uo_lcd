@@ -61,13 +61,13 @@ Encoder enc1(SW1, SW2, KEY, TYPE2);
 //----------------------------------------------
 // Переменные
 //----------------------------------------------
-volatile unsigned long stepsFor100ml;                  //  Количество шагов потребное для отбора 100 мл
+volatile uint32_t stepsFor100ml;                  //  Количество шагов потребное для отбора 100 мл
 volatile unsigned int  stepsForOneMl;                  //  Количество шагов потребное для отбора 1 мл
-volatile unsigned long stepsCount     = 0;             //  Счетчик количества шагов
-volatile unsigned long drinkBackCounter = 0;           //  Обратный счётчик шагов дозатора
-volatile unsigned long temp           = 0;             //  Временная переменная для разнообразных нужд
-volatile unsigned long tempA          = 0;             //  Временная переменная для разнообразных нужд
-volatile unsigned long OCR1ABase      = 0;             //  Коэффициент для расчета OCR1A
+volatile uint32_t stepsCount     = 0;             //  Счетчик количества шагов
+volatile uint32_t drinkBackCounter = 0;           //  Обратный счётчик шагов дозатора
+volatile uint32_t temp           = 0;             //  Временная переменная для разнообразных нужд
+volatile uint32_t tempA          = 0;             //  Временная переменная для разнообразных нужд
+volatile uint32_t OCR1ABase      = 0;             //  Коэффициент для расчета OCR1A
 volatile unsigned int  timer1EndValue = 65535;         //  Значение при котором происходит прерывание от таймера 1 (11739)
 volatile byte          T1ClockDivider = PRESCALER_8;    //
 volatile byte          thousandth     = 0;             //
@@ -238,8 +238,10 @@ void setup()
   pinMode(SW2,  INPUT_PULLUP);
   pinMode(KEY,  INPUT_PULLUP);
   pinMode(TMAS, INPUT_PULLUP);
+
   digitalWrite(DRV_EN, LOW);
   digitalWrite(DIR, LOW);
+
   digitalWrite(STEP, 1);
   digitalWrite(PIEZO, 1);
   digitalWrite(LED, 1);
@@ -310,7 +312,9 @@ void setup()
   stepEnabled = false;
 
   // Попытка прочитать установки из EEPROM
-  EEPROM.get(0, stepsFor100ml);
+  uint32_t saved100ml=0;
+  EEPROM.get(0,saved100ml);
+  stepsFor100ml=saved100ml;
   if ((stepsFor100ml < minStepsFor100ml) or (stepsFor100ml > maxStepsFor100ml)) // Если в EEPROM не установлено число шагов на 100 мл, то
   {
     stepsFor100ml = defaultpValsFor100ml;                     // Установим число шагов на 100 мл по умолчанию
@@ -1115,8 +1119,10 @@ void tryToSaveStepsFor100ml()
       else
       {
         //stepsCount = 100*(stepsCount/100);
-        EEPROM.put(0, stepsCount);
-        EEPROM.get(0, stepsFor100ml);
+        uint32_t stepsSave = stepsCount;
+        EEPROM.put(0, stepsSave);//EEPROM.put(0, stepsCount);
+        //EEPROM.get(0, stepsFor100ml);
+        EEPROM.get(0, stepsSave);stepsFor100ml=stepsSave;
         //stepsForOneMl = round((float)stepsFor100ml / 100);
         stepsForOneMl = stepsFor100ml / 100;
         calcOCR1A();

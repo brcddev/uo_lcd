@@ -6,18 +6,13 @@
  */
 
 #define MEMADDR7B 0x57 // 7-bit addr of memory chip
-#define DATA 0xA1 // can be changed
 #define ADDRLEN 2 // length of internal mem addr
 #define MEMLEN 10 // the number of bytes to be written and to be read
-#define LEDPIN 13 // LEd to report result
+#define LEDPIN 1 // LED to report result
 
-#define SDA_PORT PORTB
-#define SDA_PIN 4 
-#define SCL_PORT PORTB
-#define SCL_PIN 5 
-#include <SoftWire.h>
+#include "SlowSoftI2CMaster.h"
 
-SoftWire Wire = SoftWire();
+SlowSoftI2CMaster si = SlowSoftI2CMaster(4, 5, true);
 
 void setup() {
   pinMode(LEDPIN, OUTPUT);
@@ -25,32 +20,26 @@ void setup() {
   delay(1000);
   digitalWrite(LEDPIN, LOW);
   delay(1000);
-  Wire.begin();
+  if (!si.i2c_init()) error();
 }
 
 void loop() {
   byte i;
-  // writing 10 bytes
-  Wire.beginTransmission(MEMADDR7B);
+  if (!si.i2c_start(MEMADDR7B<<1 | I2C_WRITE)) error();
   for (i=0; i < ADDRLEN; i++) 
-    Wire.write(0);
+    if (!si.i2c_write(0)) error();
   for (i=0; i<MEMLEN; i++)
-    Wire.write(DATA);
-  if (Wire.endTransmission() != 0) error();
-
-  // setting register addres (waiting for an ACK)
-  
-  while (true) {
-    Wire.beginTransmission(MEMADDR7B);
-    for (i=0; i < ADDRLEN; i++) 
-      Wire.write(0);
-    if (Wire.endTransmission() == 0) break;
-  }
-  if (Wire.requestFrom(MEMADDR7B, MEMLEN) != MEMLEN) error();
-  i = 0;
-  while (Wire.available()) {
-    if (Wire.read() != DATA) error();
-  }
+    if (!si.i2c_write(0xA1));
+  si.i2c_stop();
+  if (!si.i2c_start_wait((MEMADDR7B<<1 | I2C_WRITE))) error();
+  for (i=0; i < ADDRLEN; i++) 
+    if (!si.i2c_write(0)) error();
+  si.i2c_stop();
+  if (!si.i2c_rep_start((MEMADDR7B<<1 | I2C_READ))) error();
+  for (i=0; i < MEMLEN-1; i++) 
+    if (si.i2c_read(false) != 0xA1) error();
+  if (si.i2c_read(true) != 0xA1) error();
+  si.i2c_stop();
   digitalWrite(LEDPIN, HIGH);
   delay(2000);
   digitalWrite(LEDPIN, LOW);

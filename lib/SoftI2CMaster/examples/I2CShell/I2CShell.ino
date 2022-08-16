@@ -15,16 +15,21 @@
  * V 1.1 (11-Feb-18)
  * - line editing added
  * - documentation completed
- * V 1.2 (12-Feb)
+ * V 1.2 (12-Feb-18)
  * - changed the implementation of kill-rest-of-line
  * - added line number for T-command
  * - allowed now for 700 kHz as the maximum bus clock; works perfect, but
  *   you definitely need low pullup resistors, the internal ones won't 
  *   work at this speed.
  * - some cleanup for the T command
+ * V 1.3 (10-Nov-21)
+ * - removed some unused variables 
+ * - fixed a if-condition from (token = NUM_TOK) to (token == NUM_TOK) line 677
  */
 
 #define VERSION "1.3"
+
+// Something you have to edit!
 #define USEEEPROM 1
 #define I2C_HARDWARE 0
 
@@ -61,11 +66,21 @@
 // constants for the I2C interface
 #define I2C_TIMEOUT 100
 #define I2C_PULLUP 1
-#define SDA_PORT PORTC
-#define SDA_PIN 4 // = A4
-#define SCL_PORT PORTC
-#define SCL_PIN 5 // = A5
 
+#ifdef __AVR_ATmega328P__
+/* Corresponds to A4/A5 - the hardware I2C pins on Arduinos */
+#define SDA_PORT PORTC
+#define SDA_PIN 4
+#define SCL_PORT PORTC
+#define SCL_PIN 5
+#define I2C_FASTMODE 1
+#else
+#define SDA_PORT PORTB
+#define SDA_PIN 0
+#define SCL_PORT PORTB
+#define SCL_PIN 2
+#define I2C_FASTMODE 1
+#endif
 
 #include <SoftI2CMaster.h>
 
@@ -203,7 +218,7 @@ void loop()
 bool readLine(char *buf)
 {
   char next = '\0';
-  int i = 0, fill = 0, j;
+  int i = 0, fill = 0;
 
   while (next != '\r' && next != '\n') {
     while (!Serial.available());
@@ -655,8 +670,7 @@ void execute(exec_t *cmds, byte *vals)
 void report(char *line, exec_t *cmds, byte *vals)
 {
  int i = 0;
- bool ack, nostart;
- byte readval;
+ bool nostart;
  int startline = 0;
  int stopline = 0;
  long val;
@@ -664,7 +678,7 @@ void report(char *line, exec_t *cmds, byte *vals)
  token_t token;
  if (strlen(line) > 1) {
    token = nextToken(line, ix, val);
-   if (token = NUM_TOK) {
+   if (token == NUM_TOK) {
      startline = val;
      stopline = startline + 19;
    }
@@ -833,7 +847,9 @@ void frequency(char *line)
   token_t token;
   long value;
   int ix = 1;
+#if I2C_HARDWARE
   int bitrate;
+#endif
   
   token = nextToken(line, ix, value);
   if (token != NUM_TOK) {
