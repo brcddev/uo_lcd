@@ -1,8 +1,8 @@
 #ifndef _CONFIG_H_ 
 #define _CONFIG_H_
 
-#define USE_DS18B20
-
+//#define USE_DS18B20
+#define DS_ALARM_TIME (1000*10)
 #define AUTO_RATE 7 //процент уменьшения отбора после внешнего стопа.
 #define MIN_RATE 1000 //минимальный отбор тела, ниже которого не снижаемся
 #define RMS_CURRENT 800

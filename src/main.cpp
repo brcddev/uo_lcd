@@ -15,7 +15,8 @@
 #define tpVal 75
 SH1106Lib lcd;
 //#include <U8g2lib.h>
-#include <EEPROM.h>                           // Стандартная библиотека
+//#include <EEPROM.h>                           // Стандартная библиотека
+#include <avr/eeprom.h>
 #include "GyverEncoder.h"                     // Библиотеки с сайта 
 #include "directTimers.h"                     // https://codeload.github.com/AlexGyver/GyverLibs/zip/master
 #include "Wire.h"
@@ -23,8 +24,13 @@ SH1106Lib lcd;
 #include "uo.h"
 #ifdef USE_DS18B20
 #include "ow_main.h"
+float curr_temp,set_temp;
+bool temp_check_enable=false;
+bool ds_found=false;
+uint32_t alarm_timer;
+uint8_t ds_delta=2;
 #endif
-
+uint32_t ee_stepsFor100ml  EEMEM=0;
 //U8G2_SSD1309_128X64_NONAME2_1_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ 13, /* data=*/ 11, /* cs=*/ 10, /* dc=*/ A0, /* reset=*/ A1);
 
 // Select your stepper driver type
@@ -43,6 +49,8 @@ Encoder enc1(SW1, SW2, KEY, TYPE2);
 #define SELECT_VOL            4               //
 #define TUNING                10              //
 #define TUNING_PAUSE          11              //
+
+#define PAUSED_BY_TEMP        20
 //----------------------------------------------
 // Константы
 //----------------------------------------------
@@ -91,6 +99,7 @@ volatile bool          sndFlag        = false;
 //--------------------------------------------------------------------------------------
 // Сообщения
 #define STRING_00 "--- NORMAL  MODE ---"  //
+//const char STRING_00[]="--- NORMAL  MODE ---";
 #define STRING_01 "---    PAUSED    ---"  //  
 #define STRING_02 "--- PAUSED by OP ---"  //  
 #define STRING_03 "-- PAUSED by EXT  --"  //  
@@ -102,6 +111,9 @@ volatile bool          sndFlag        = false;
 #define STRING_13 "-Counter too large -"  //  
 #define STRING_14 "-- 100 ml UPDATED --"  //  
 #define STRING_15 "--  Total ZEROED  --"  //  
+
+#define STRING_20 "TEMP MODE 00.0->00.0"
+#define STRING_21 "-- PAUSED by Temp --"
 //--------------------------------------------------------------------------------------
 bool flagAcceleration=false;
 uint16_t rateAcceleration=START_ACCEL;
@@ -124,6 +136,11 @@ void setMinimumRate();
 void tryToTune();
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------
+inline void print_name(String s)
+{
+  lcd.setCursor(0, 0);
+  lcd.print(s);
+}
 //MIN_RATE минимальный отбор тела, ниже не опускаемся
 #ifdef AUTO_RATE //процент уменьшения отбора
 void auto_rate(){
@@ -137,6 +154,32 @@ void auto_rate(){
 }
 #endif
 
+#ifdef USE_DS18B20
+void onReadyTemp(int16_t raw){
+  curr_temp = float(raw/ 16);
+  if(temp_check_enable){
+    if((set_temp+ds_delta/10)>curr_temp){
+      stepEnabled = false;
+      currentMode = PAUSED_BY_TEMP;
+      print_name(STRING_21);
+      //alarm_timer=millis();
+    }
+  }  
+}
+
+inline void print_temp_pause()
+{
+  char buff[12];
+  String s;
+  dtostrf(curr_temp,4,1,&buff[0]);
+  //buff[5]=":";
+  s=String(buff)+":";
+  dtostrf(set_temp+ds_delta/10,4,1,buff);
+  s+=String(buff);
+  lcd.setCursor(10, 0);
+  lcd.print(s);
+}
+#endif
 void pauseRun(){
   digitalWrite(DRV_EN, HIGH);
   stepEnabled = false;
@@ -248,6 +291,7 @@ void setup()
 
   #ifdef USE_DS18B20
   ow_setup();
+  set_onReadyTemp(onReadyTemp);
   #endif
   //drv
   driver.begin();
@@ -312,9 +356,7 @@ void setup()
   stepEnabled = false;
 
   // Попытка прочитать установки из EEPROM
-  uint32_t saved100ml=0;
-  EEPROM.get(0,saved100ml);
-  stepsFor100ml=saved100ml;
+  stepsFor100ml=eeprom_read_dword(&ee_stepsFor100ml);//EEPROM.get(0,stepsFor100ml);
   if ((stepsFor100ml < minStepsFor100ml) or (stepsFor100ml > maxStepsFor100ml)) // Если в EEPROM не установлено число шагов на 100 мл, то
   {
     stepsFor100ml = defaultpValsFor100ml;                     // Установим число шагов на 100 мл по умолчанию
@@ -644,6 +686,46 @@ void loop()
         //--------------------
       }
       break;
+   //-------------------------------------------------------------
+    // Остановка по превышению температуры-------------------------
+    //-------------------------------------------------------------
+    #ifdef USE_DS18B20
+    case PAUSED_BY_TEMP:
+      {
+        if ((curr_temp<=set_temp))
+        {
+          sndFlag = false;
+          #ifdef AUTO_RATE
+          auto_rate();
+          #endif 
+          resumeRun();
+        }
+        //--------------------
+        if (enc1.isRight()){
+          ds_delta++;
+          if (ds_delta>20) ds_delta=20;
+          print_temp_pause();
+        }
+        if (enc1.isLeft()){
+          ds_delta--;
+          if (ds_delta<1)ds_delta=1;
+          print_temp_pause();
+        }        
+        if((millis()-alarm_timer)>DS_ALARM_TIME){
+          pattern = soundB;
+          sndFlag = true;
+        }
+        if (enc1.isClick())
+        {
+          sndFlag = false;
+          alarm_timer=millis();
+        }
+        //--------------------
+      }
+      break;
+      #endif
+    //-------------------------------------------------------------
+
     //-------------------------------------------------------------
     // Остановка по достижению заданного разового объема отбора ---
     //-------------------------------------------------------------
@@ -808,8 +890,14 @@ void loop()
 void resumeRun()
 {
   digitalWrite(DRV_EN, LOW);
-  lcd.setCursor(0, 0);
-  lcd.print(STRING_00);
+  //lcd.setCursor(0, 0);
+  //lcd.print(STRING_00);
+  #ifdef USE_DS18B20
+  if (temp_check_enable)print_name(STRING_20);
+  else print_name(STRING_00);
+  #else
+  print_name(STRING_00);
+  #endif  
   currentMode = RUNNING;
     if (!flagAcceleration){
       if (rate>START_ACCEL){
@@ -1119,10 +1207,8 @@ void tryToSaveStepsFor100ml()
       else
       {
         //stepsCount = 100*(stepsCount/100);
-        uint32_t stepsSave = stepsCount;
-        EEPROM.put(0, stepsSave);//EEPROM.put(0, stepsCount);
-        //EEPROM.get(0, stepsFor100ml);
-        EEPROM.get(0, stepsSave);stepsFor100ml=stepsSave;
+        eeprom_write_dword(&ee_stepsFor100ml,stepsCount);//EEPROM.put(0, stepsCount);
+        stepsFor100ml=eeprom_read_dword(&ee_stepsFor100ml);//EEPROM.get(0, stepsFor100ml);
         //stepsForOneMl = round((float)stepsFor100ml / 100);
         stepsForOneMl = stepsFor100ml / 100;
         calcOCR1A();

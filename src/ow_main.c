@@ -30,7 +30,11 @@
 #include "OWIIntFunctions.h"
 #include "OWIInterruptDriven.h"
 #include "common_files/OWIcrc.h"
-
+#include "ow_main.h"
+ReadyTemp_t onRedyTemp = NULL;
+void set_onReadyTemp(ReadyTemp_t fn){
+    onRedyTemp = fn;
+}
 void OWI_StateMachine();
 
 // Defines used only in code example.
@@ -51,7 +55,7 @@ void OWI_StateMachine();
 extern OWIflags OWIStatus;
 extern unsigned char *OWIDataBuffer;
 
-signed int temperature;
+//signed int temperature;
 
 
 /*! \brief  The state machine that controls communication on the 1-Wire bus
@@ -171,7 +175,10 @@ void OWI_StateMachine()
             // If they match, update the temperature variable.
             if (crc == buf[8])
             {
-                temperature = buf[0] | (buf[1] << 8);                
+                //temperature = buf[0] | (buf[1] << 8); 
+                if(onRedyTemp){
+                    onRedyTemp(buf[0] | (buf[1] << 8));
+                }               
                 state = OWI_STATE_IDLE;
             }
             // If they don't match, go back to the second Reset to 
