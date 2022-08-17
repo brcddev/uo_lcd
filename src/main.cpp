@@ -1146,8 +1146,8 @@ ISR_T1_COMPA
   if ((stepEnabled) or (!(stepEnabled) and !(digitalRead(STEP))))
     // Если шаги разрешены или запрещены и уровень на тактовом выходе низкий, то:
   {
-    digitalWrite(STEP, !digitalRead(STEP));   // Меняем уровень на шагательной ноге на противоположный
-    if (digitalRead(STEP))                    // Если был переход 0->1,
+    STEP_PORT^=(1<<STEP_PIN);// digitalWrite(STEP, !digitalRead(STEP));   // Меняем уровень на шагательной ноге на противоположный
+    if (bit_is_set(STEP_PORT,STEP_PIN))//   if (digitalRead(STEP))                    // Если был переход 0->1,
     {
       stepsCount++;                           // то увеличиваем счетчик шагов
       TIMER1_COMPA_setValue(timer1EndValue);  // и перезагружаем значение сравнения счетчика.

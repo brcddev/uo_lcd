@@ -3,7 +3,7 @@
 
 //#define USE_DS18B20
 #define DS_ALARM_TIME (1000*10)
-#define AUTO_RATE 7 //процент уменьшения отбора после внешнего стопа.
+//#define AUTO_RATE 7 //процент уменьшения отбора после внешнего стопа.
 #define MIN_RATE 900 //минимальный отбор тела, ниже которого не снижаемся
 #define RMS_CURRENT 1200
 #define MICROSTEPS 8
@@ -11,6 +11,8 @@
 // Подключение TMC2209
 #define DIR 2
 #define STEP 3      // PD3 Тактовые импульсы на драйвер ШД
+#define STEP_PORT PORTD
+#define STEP_PIN  3
 #define SW_TX            4 // 1kOm TMC2208/TMC2224 SoftwareSerial transmit pin
 #define SW_RX            5 // TMC2208/TMC2224 SoftwareSerial receive pin
 
