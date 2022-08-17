@@ -115,11 +115,32 @@ volatile bool          sndFlag        = false;
 #define STRING_20 "TEMP MODE 00.0->00.0"
 #define STRING_21 "-- PAUSED by Temp --"
 //--------------------------------------------------------------------------------------
+
+typedef struct 
+{
+  uint16_t BigStep;
+  uint16_t MidStep;
+  uint8_t Step;
+} step_t;
+
+typedef struct 
+{
+  bool *disabled;
+  volatile uint16_t *var;
+  uint16_t MaxVal;
+  step_t *Step;
+} inc_dec_t;
+
 bool flagAcceleration=false;
 uint16_t rateAcceleration=START_ACCEL;
 uint16_t new_rate;
 //void calcOCR1A();
 String formatNum(uint32_t Number, int lenth);
+
+step_t st_rate;
+inc_dec_t id_rate,id_vol;
+void decreaseVal(inc_dec_t *v);
+void increaseVal(inc_dec_t *v);
 void tryToSaveStepsFor100ml();
 void decreaseRate();
 void increaseRate();
@@ -134,7 +155,8 @@ void printValues();
 void setMaximumRate();
 void setMinimumRate();
 void tryToTune();
-uint16_t prescalers[]={0,1,8,64,256,1024};
+uint16_t calcCRC16(uint8_t const *buf, uint32_t len);
+//uint16_t prescalers[]={0,1,8,64,256,1024};
 //--------------------------------------------------------------------------------------
 //void calcBaseOCR1A(){
   //
@@ -142,6 +164,7 @@ uint16_t prescalers[]={0,1,8,64,256,1024};
   //BaseOCR1A=round((float)F_CPU*3600/2/prescalers[prescaler]/ stepsForOneMl);
 //}
 //--------------------------------------------------
+/*
 inline void print_state2()
 {
   char buff[12];
@@ -159,6 +182,7 @@ inline void print_state2()
   lcd.setCursor(0, 4*yFONT);
   lcd.print(s);
 }
+*/
 inline void print_name(String s)
 {
   lcd.setCursor(0, 0);
@@ -403,7 +427,11 @@ void setup()
     currentMode = RUNNING;
     printMainScreen();
   } 
-  Serial.println(stepsFor100ml);
+  //Serial.println(stepsFor100ml);
+
+  st_rate = (step_t) {rateBigStep, rateMidStep, rateMidStep};
+  id_rate = (inc_dec_t){&flagAcceleration,&rate,maximumRate,&st_rate};
+  id_vol =  (inc_dec_t){NULL,&drinkVolume,maxDrinkVol,&st_rate};
 }
 //--------------------------------------------------------------------------------------
 //---------------------- Начало основного цикла ----------------------------------------
@@ -854,6 +882,7 @@ void loop()
         //--------------------
         if (enc1.isRight())
         {
+          /*
           if (drinkVolume >= 1000) {
             drinkVolume = drinkVolume + volBigStep;
           } else {
@@ -864,6 +893,8 @@ void loop()
             }
           }
           if (drinkVolume >= maxDrinkVol) drinkVolume = maxDrinkVol;
+          */
+          increaseVal(&id_vol);
           lcd.setCursor(rpVal, 3*yFONT);
           lcd.print(formatNum(drinkVolume, 5));
           newDrinkVol = true;
@@ -871,6 +902,7 @@ void loop()
         //--------------------
         if (enc1.isLeft())
         {
+          /*
           if (drinkVolume >= (1000 + volBigStep)) {
             drinkVolume = drinkVolume - volBigStep;
           } else {
@@ -884,6 +916,8 @@ void loop()
               else drinkVolume = 0;
             }
           }
+          */
+          decreaseVal(&id_vol);
           //if (drinkVolume <= 0) drinkVolume = 0;
           lcd.setCursor(rpVal, 3*yFONT);
           lcd.print(formatNum(drinkVolume, 5));
@@ -983,6 +1017,7 @@ void setMinimumRate()
 // Увеличение скорости отбора ----------------------------------------------------------
 void increaseRate()
 {
+  /*
   if (flagAcceleration)return;
   if (rate >= 1000) {
     rate = rate + rateBigStep;
@@ -994,12 +1029,15 @@ void increaseRate()
     }
   }
   if (rate >= maximumRate) rate = maximumRate;
+  */
+  increaseVal(&id_rate);
   calcOCR1A();
 }
 //--------------------------------------------------------------------------------------
 // Уменьшение скорости отбора ----------------------------------------------------------
 void decreaseRate()
 {
+  /*
   if (flagAcceleration)return;
   if (rate >= (1000 + rateBigStep)) {
     rate = rate - rateBigStep;
@@ -1014,7 +1052,44 @@ void decreaseRate()
       else rate = 0;
     }
   }
+  */
+  decreaseVal(&id_rate);
   calcOCR1A();
+}
+
+void increaseVal(inc_dec_t *v)
+{
+  if (v->disabled!=NULL && *v->disabled) return;
+  if (*v->var >= 1000) {
+    *v->var = *v->var + v->Step->BigStep;
+  } else {
+    if (*v->var >= 200) {
+      *v->var = *v->var + v->Step->MidStep;
+    } else {
+      *v->var = *v->var + v->Step->Step;
+    }
+  }
+  if (*v->var >= v->MaxVal) *v->var = v->MaxVal;
+  
+}
+//--------------------------------------------------------------------------------------
+// Уменьшение скорости отбора ----------------------------------------------------------
+void decreaseVal(inc_dec_t *v)
+{
+  if (v->disabled!=NULL && *v->disabled) return;
+  if (*v->var >= (1000 + v->Step->BigStep)) {
+    *v->var = *v->var - v->Step->BigStep;
+  } else {
+    if (*v->var >= (200 + v->Step->MidStep)) {
+      *v->var = *v->var - v->Step->MidStep;
+    } else {
+      //rate = rate - rateStep;
+      if (*v->var > v->Step->Step) {
+        *v->var = *v->var - v->Step->Step;
+      }
+      else *v->var = 0;
+    }
+  }
 }
 //--------------------------------------------------------------------------------------
 // Вывод на экран текущих значений в рабочем режиме
@@ -1143,7 +1218,7 @@ ISR_T2_COMPA
 // Прерывание по совпадению А в таймере 1 ----------------------------------------------
 ISR_T1_COMPA
 {
-  if ((stepEnabled) or (!(stepEnabled) and !(digitalRead(STEP))))
+  if ((stepEnabled) or (!(stepEnabled) and bit_is_clear(STEP_PORT,STEP_PIN)))// !(digitalRead(STEP))))
     // Если шаги разрешены или запрещены и уровень на тактовом выходе низкий, то:
   {
     STEP_PORT^=(1<<STEP_PIN);// digitalWrite(STEP, !digitalRead(STEP));   // Меняем уровень на шагательной ноге на противоположный
@@ -1257,6 +1332,9 @@ void tryToSaveStepsFor100ml()
 //--------------------------------------------------------------------------------------
 String formatNum(uint32_t Number, int lenth)
 {
+  char buf[lenth+1];
+  dtostrf(Number,lenth,0,&buf[0]);
+  /*
   String temp = String(Number);
   int j = temp.length();
   String prefix = "";
@@ -1264,7 +1342,32 @@ String formatNum(uint32_t Number, int lenth)
   {
     prefix = " " + prefix;
   }
-  String(temp1) = prefix + String(temp);
-  return temp1;
+  //String(temp1) = prefix + String(temp);
+  return prefix + String(temp);
+  */
+  return String(buf);
 }
 //--------------------------------------------------------------------------------------
+uint16_t calcCRC16(uint8_t const *buf, uint32_t len)
+{
+    unsigned int temp, temp2, flag;
+    temp = 0xFFFF;
+    for (unsigned char i = 0; i < len; i++)
+    {
+        temp = temp ^ buf[i];
+        for (unsigned char j = 1; j <= 8; j++)
+        {
+            flag = temp & 0x0001;
+            temp >>=1;
+            if (flag)
+                temp ^= 0xA001;
+        }
+    }
+    // Reverse byte order.
+    temp2 = temp >> 8;
+    temp = (temp << 8) | temp2;
+    temp &= 0xFFFF;
+    // the returned value is already swapped
+    // crcLo byte is first & crcHi byte is last
+    return temp;
+}

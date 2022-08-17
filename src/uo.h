@@ -47,8 +47,6 @@ typedef struct
 #define DOZER_I2C_ADDR (0x1e)
 #define TWI_SA (DOZER_I2C_ADDR << 1)
 
-uint16_t calcCRC16(uint8_t const *buf, uint32_t len);
-
 
 #ifdef __cplusplus
 }
