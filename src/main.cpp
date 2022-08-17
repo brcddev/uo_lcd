@@ -999,7 +999,7 @@ void setMaximumRate()
 {
   if (flagAcceleration)return;
   rate = maximumRate;
-  calcOCR1A();
+  resumeRun();// calcOCR1A();
   lcd.setCursor(rpVal, 1*yFONT);
   lcd.print(formatNum(rate, 5));
 }
