@@ -75,9 +75,9 @@ volatile uint32_t stepsCount     = 0;             //  Счетчик колич�
 volatile uint32_t drinkBackCounter = 0;           //  Обратный счётчик шагов дозатора
 volatile uint32_t temp           = 0;             //  Временная переменная для разнообразных нужд
 volatile uint32_t tempA          = 0;             //  Временная переменная для разнообразных нужд
-volatile uint32_t OCR1ABase      = 0;             //  Коэффициент для расчета OCR1A
+//volatile uint32_t OCR1ABase      = 0;             //  Коэффициент для расчета OCR1A
 volatile unsigned int  timer1EndValue = 65535;         //  Значение при котором происходит прерывание от таймера 1 (11739)
-volatile byte          T1ClockDivider = PRESCALER_8;    //
+//volatile byte          T1ClockDivider = PRESCALER_8;    //
 volatile byte          thousandth     = 0;             //
 volatile byte          tenth          = 0;             //
 volatile byte          counterA       = 0;             //
@@ -347,8 +347,7 @@ void setup()
   driver.begin();
   driver.toff(4);
   driver.blank_time(24);
-  //driver.rms_current(1200); // mA
-   driver.rms_current(RMS_CURRENT); // mA
+  driver.rms_current(RMS_CURRENT); // mA
   driver.microsteps(MICROSTEPS);//8
   driver.TCOOLTHRS(0xFFFFF); // 20bit max
   driver.semin(5);
@@ -376,7 +375,7 @@ void setup()
 */
     
   // Настройка таймера 1, он задаёт частоту шагания двигателя
-  TIMER1_setClock(T1ClockDivider);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8
+  TIMER1_setClock(PRESCALER_64);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8
   TIMER1_setMode(CTC_MODE);                 // Режим работы таймера - сравнение со значением, прерывание и рестарт
   TIMER1_COMPA_setValue(timer1EndValue);    // Значение для сравнения
   TIMER1_attach_COMPA();                    // Прерывание от таймера 1 по сравнению
@@ -412,9 +411,7 @@ void setup()
   {
     stepsFor100ml = defaultpValsFor100ml;                     // Установим число шагов на 100 мл по умолчанию
   }
-  //stepsForOneMl = round((float)stepsFor100ml / 100);
-  stepsForOneMl = stepsFor100ml / 100;
-  OCR1ABase = 360000000000LL / stepsFor100ml; //round((float)3600000000 / stepsForOneMl);
+  stepsForOneMl = round((float)stepsFor100ml / 100);
   calcOCR1A();
   drinkVolume = defaultDrink;
   drinkBackCounter = (uint32_t)drinkVolume * stepsForOneMl - 1;
@@ -1017,19 +1014,6 @@ void setMinimumRate()
 // Увеличение скорости отбора ----------------------------------------------------------
 void increaseRate()
 {
-  /*
-  if (flagAcceleration)return;
-  if (rate >= 1000) {
-    rate = rate + rateBigStep;
-  } else {
-    if (rate >= 200) {
-      rate = rate + rateMidStep;
-    } else {
-      rate = rate + rateStep;
-    }
-  }
-  if (rate >= maximumRate) rate = maximumRate;
-  */
   increaseVal(&id_rate);
   calcOCR1A();
 }
@@ -1037,22 +1021,6 @@ void increaseRate()
 // Уменьшение скорости отбора ----------------------------------------------------------
 void decreaseRate()
 {
-  /*
-  if (flagAcceleration)return;
-  if (rate >= (1000 + rateBigStep)) {
-    rate = rate - rateBigStep;
-  } else {
-    if (rate >= (200 + rateMidStep)) {
-      rate = rate - rateMidStep;
-    } else {
-      //rate = rate - rateStep;
-      if (rate > rateStep) {
-        rate = rate - rateStep;
-      }
-      else rate = 0;
-    }
-  }
-  */
   decreaseVal(&id_rate);
   calcOCR1A();
 }
@@ -1083,7 +1051,6 @@ void decreaseVal(inc_dec_t *v)
     if (*v->var >= (200 + v->Step->MidStep)) {
       *v->var = *v->var - v->Step->MidStep;
     } else {
-      //rate = rate - rateStep;
       if (*v->var > v->Step->Step) {
         *v->var = *v->var - v->Step->Step;
       }
@@ -1226,7 +1193,6 @@ ISR_T1_COMPA
     {
       stepsCount++;                           // то увеличиваем счетчик шагов
       TIMER1_COMPA_setValue(timer1EndValue);  // и перезагружаем значение сравнения счетчика.
-      TIMER1_setClock(T1ClockDivider);
       if (drinkVolume != 0)                   // Если задан ненулевой объем наливайки
       {
         if (drinkBackCounter == 0)            // и налито, сколько запрошено,
@@ -1248,19 +1214,11 @@ ISR_T1_COMPA
 void calcOCR1A()
 {
   stepEnabled = false;
-  //temp = round((float)OCR1ABase/ rate);             // Fcpu = 16000000 Гц, N - количество шагов на 1 мл,
-  temp = OCR1ABase / rate;
-  tempA = PRESCALER_8;
-  if (temp > 65535)
-  {
-    temp = temp / 8; tempA = PRESCALER_64;
-    if (temp > 65535)
-    {
-      temp = temp / 8; tempA = PRESCALER_256;
-    }
-  }
+  temp = round((float)450000000 / stepsForOneMl); // шаг/8
+  // OCR1A = (Fcpu*3600)/(2*N*K*R)-1
+  temp = round((float)temp / rate);             // Fcpu = 16000000 Гц, N - количество шагов на 1 мл,
   temp = temp - 1;                              // K - делитель перед счетчиком Т1 (64), R - скорость отбора мл/час
-  if (temp > 65535)
+  if (temp >= 65535)
   {
     rate = 0;
   }
@@ -1268,18 +1226,18 @@ void calcOCR1A()
   {
     noInterrupts();                               // Обеспечиваем атомарность действия
     timer1EndValue = temp;                        //
-    T1ClockDivider = tempA;
     interrupts();                                 // Восстанавливаем прерывания
   }
 }
+
 //--------------------------------------------------------------------------------------
 // Пересчёт количества шагов в миллилитры ----------------------------------------------
 void calcTotalVolume()
 {
-  totalVolume = round((float)stepsCount / stepsForOneMl);
-  //totalVolume = round(stepsCount / stepsForOneMl);
-  remainVolume = round((float)(drinkBackCounter + 1) / stepsForOneMl);
-  //remainVolume = round((drinkBackCounter + 1) / stepsForOneMl);
+  //totalVolume = round((float)stepsCount / stepsForOneMl);
+  //remainVolume = round((float)(drinkBackCounter + 1) / stepsForOneMl);
+  totalVolume = stepsCount / stepsForOneMl;
+  remainVolume = (drinkBackCounter + 1) / stepsForOneMl;  
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -1309,11 +1267,10 @@ void tryToSaveStepsFor100ml()
       }
       else
       {
-        //stepsCount = 100*(stepsCount/100);
+        stepsCount = 100*(stepsCount/100);
         eeprom_write_dword(&ee_stepsFor100ml,stepsCount);//EEPROM.put(0, stepsCount);
         stepsFor100ml=eeprom_read_dword(&ee_stepsFor100ml);//EEPROM.get(0, stepsFor100ml);
-        //stepsForOneMl = round((float)stepsFor100ml / 100);
-        stepsForOneMl = stepsFor100ml / 100;
+        stepsForOneMl = round((float)stepsFor100ml / 100);
         calcOCR1A();
         rate = 0;
         stepEnabled = false;
