@@ -1,4 +1,4 @@
-#ifndef _CONFIG_H_ 
+#ifndef _CONFIG_H_
 #define _CONFIG_H_
 
 //#define USE_DS18B20
@@ -7,7 +7,7 @@
 #define MIN_RATE 900 //минимальный отбор тела, ниже которого не снижаемся
 #define RMS_CURRENT 1200
 #define MICROSTEPS 8
- 
+
 // Подключение TMC2209
 #define DIR 2
 #define STEP 3      // PD3 Тактовые импульсы на драйвер ШД
@@ -16,11 +16,11 @@
 #define SW_TX            4 // 1kOm TMC2208/TMC2224 SoftwareSerial transmit pin
 #define SW_RX            5 // TMC2208/TMC2224 SoftwareSerial receive pin
 
-#define DRV_EN 9 
+#define DRV_EN 9
 // Подключение энкодера
-#define KEY 6                             // Кнопка энкодера    
+#define KEY 6                             // Кнопка энкодера
 #define SW2 7                             // Сигнал энкодера 1 // Если кручение влево/вправо перепутано,
-#define SW1 8                            // Сигнал энкодера 2 // можно поменять местами 
+#define SW1 8                            // Сигнал энкодера 2 // можно поменять местами
                              // Тактовые импульсы на драйвер ШД
 #define START_ACCEL 2000
 
@@ -41,9 +41,4 @@
 #define soundB B01011101                     // Ритм внешнего стопа
                               // Светодиод на панели
 
-
- 
-
-//#define DS_ALARM_TIME (10*60*1000L)    //время , после которого в режиме стопа по температуре включает пищалку
-//#define DS_TIME_CHECK 1500
 #endif //_CONFIG_H_

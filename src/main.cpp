@@ -17,7 +17,8 @@ SH1106Lib lcd;
 //#include <U8g2lib.h>
 //#include <EEPROM.h>                           // Стандартная библиотека
 #include <avr/eeprom.h>
-#include "GyverEncoder.h"                     // Библиотеки с сайта 
+#include <avr/wdt.h>
+#include "GyverEncoder.h"                     // Библиотеки с сайта
 #include "directTimers.h"                     // https://codeload.github.com/AlexGyver/GyverLibs/zip/master
 #include "Wire.h"
 #include <TMCStepper.h>
@@ -100,30 +101,30 @@ volatile bool          sndFlag        = false;
 // Сообщения
 #define STRING_00 "--- NORMAL  MODE ---"  //
 //const char STRING_00[]="--- NORMAL  MODE ---";
-#define STRING_01 "---    PAUSED    ---"  //  
-#define STRING_02 "--- PAUSED by OP ---"  //  
-#define STRING_03 "-- PAUSED by EXT  --"  //  
-#define STRING_04 "-- PAUSED by AUTO --"  //  
-#define STRING_05 "--- SELECT  STEP ---"  //  
-#define STRING_10 "--- TUNING  MODE ---"  //   
-#define STRING_11 "--- TUNING PAUSE ---"  //  
-#define STRING_12 "-Counter too little-"  //  
-#define STRING_13 "-Counter too large -"  //  
-#define STRING_14 "-- 100 ml UPDATED --"  //  
-#define STRING_15 "--  Total ZEROED  --"  //  
+#define STRING_01 "---    PAUSED    ---"  //
+#define STRING_02 "--- PAUSED by OP ---"  //
+#define STRING_03 "-- PAUSED by EXT  --"  //
+#define STRING_04 "-- PAUSED by AUTO --"  //
+#define STRING_05 "--- SELECT  STEP ---"  //
+#define STRING_10 "--- TUNING  MODE ---"  //
+#define STRING_11 "--- TUNING PAUSE ---"  //
+#define STRING_12 "-Counter too little-"  //
+#define STRING_13 "-Counter too large -"  //
+#define STRING_14 "-- 100 ml UPDATED --"  //
+#define STRING_15 "--  Total ZEROED  --"  //
 
 #define STRING_20 "TEMP MODE 00.0->00.0"
 #define STRING_21 "-- PAUSED by Temp --"
 //--------------------------------------------------------------------------------------
 
-typedef struct 
+typedef struct
 {
   uint16_t BigStep;
   uint16_t MidStep;
   uint8_t Step;
 } step_t;
 
-typedef struct 
+typedef struct
 {
   bool *disabled;
   volatile uint16_t *var;
@@ -192,10 +193,10 @@ inline void print_name(String s)
 #ifdef AUTO_RATE //процент уменьшения отбора
 void auto_rate(){
   uint16_t dec_rate;
-  if (rate > MIN_RATE){ //пропускаем головы и подголовки 
+  if (rate > MIN_RATE){ //пропускаем головы и подголовки
     dec_rate=rate/100*AUTO_RATE;
     if ((rate-dec_rate)<MIN_RATE)rate=MIN_RATE;
-    else rate-=dec_rate; 
+    else rate-=dec_rate;
     calcOCR1A();
   }
 }
@@ -211,7 +212,7 @@ void onReadyTemp(int16_t raw){
       print_name(STRING_21);
       //alarm_timer=millis();
     }
-  }  
+  }
 }
 
 inline void print_temp_pause()
@@ -291,7 +292,7 @@ void receiveEvent(int howMany)
         case DOZER_SET_TOTAL_VOLUME:
         {
           totalVolume = (uint16_t)cmd.val;
-          stepsCount = (uint32_t)totalVolume * (uint32_t)stepsForOneMl; 
+          stepsCount = (uint32_t)totalVolume * (uint32_t)stepsForOneMl;
         }
         break;
 
@@ -373,7 +374,7 @@ void setup()
     Serial.println(driver.microsteps());
     Serial.println(driver.rms_current());
 */
-    
+
   // Настройка таймера 1, он задаёт частоту шагания двигателя
   TIMER1_setClock(PRESCALER_64);             // Частота тактирования таймера 1: 16/32 = 0.5 МГц при шаге/8
   TIMER1_setMode(CTC_MODE);                 // Режим работы таймера - сравнение со значением, прерывание и рестарт
@@ -423,21 +424,22 @@ void setup()
   else {
     currentMode = RUNNING;
     printMainScreen();
-  } 
+  }
   //Serial.println(stepsFor100ml);
 
   st_rate = (step_t) {rateBigStep, rateMidStep, rateMidStep};
   id_rate = (inc_dec_t){&flagAcceleration,&rate,maximumRate,&st_rate};
   id_vol =  (inc_dec_t){NULL,&drinkVolume,maxDrinkVol,&st_rate};
+  WDT_attachInterrupt(512); // FIIX!!! CHECK!!!!
 }
 //--------------------------------------------------------------------------------------
 //---------------------- Начало основного цикла ----------------------------------------
 void loop()
 {
   if (TWAR != TWI_SA) TWAR = TWI_SA;
-  #ifdef USE_DS18B20  
+  #ifdef USE_DS18B20
   ow_loop();
-  #endif 
+  #endif
 
   if (newSecond) {
     newSecond = false;
@@ -461,7 +463,7 @@ void loop()
       }
       calcOCR1A();
       stepEnabled = true;
-    }    
+    }
   }
   //---------------------------------------------------------------
   switch (currentMode)
@@ -750,7 +752,7 @@ void loop()
           sndFlag = false;
           #ifdef AUTO_RATE
           auto_rate();
-          #endif 
+          #endif
           resumeRun();
         }
         //--------------------
@@ -763,7 +765,7 @@ void loop()
           ds_delta--;
           if (ds_delta<1)ds_delta=1;
           print_temp_pause();
-        }        
+        }
         if((millis()-alarm_timer)>DS_ALARM_TIME){
           pattern = soundB;
           sndFlag = true;
@@ -943,6 +945,7 @@ void loop()
       break;
   }
   //-------------------------------------------------
+  wdt_reset();
 }
 //---------------------- Конец основного цикла -----------------------------------------
 //--------------------------------------------------------------------------------------
@@ -956,7 +959,7 @@ void resumeRun()
   else print_name(STRING_00);
   #else
   print_name(STRING_00);
-  #endif  
+  #endif
   currentMode = RUNNING;
     if (!flagAcceleration){
       if (rate>START_ACCEL){
@@ -968,7 +971,7 @@ void resumeRun()
       else{
         flagAcceleration=false;
       }
-    }  
+    }
   if (rate != 0)
   {
     stepEnabled = true;
@@ -1038,7 +1041,7 @@ void increaseVal(inc_dec_t *v)
     }
   }
   if (*v->var >= v->MaxVal) *v->var = v->MaxVal;
-  
+
 }
 //--------------------------------------------------------------------------------------
 // Уменьшение скорости отбора ----------------------------------------------------------
@@ -1237,7 +1240,7 @@ void calcTotalVolume()
   //totalVolume = round((float)stepsCount / stepsForOneMl);
   //remainVolume = round((float)(drinkBackCounter + 1) / stepsForOneMl);
   totalVolume = stepsCount / stepsForOneMl;
-  remainVolume = (drinkBackCounter + 1) / stepsForOneMl;  
+  remainVolume = (drinkBackCounter + 1) / stepsForOneMl;
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
