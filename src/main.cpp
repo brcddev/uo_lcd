@@ -132,6 +132,7 @@ typedef struct
   step_t *Step;
 } inc_dec_t;
 
+volatile uint32_t i2c_last_data = 0;
 bool flagAcceleration=false;
 uint16_t rateAcceleration=START_ACCEL;
 uint16_t new_rate;
@@ -247,6 +248,7 @@ void requestEvent()
   dz.totalVolume = totalVolume;
   dz.crc = calcCRC16((uint8_t *)&dz,sizeof(dz)-sizeof(uint16_t));
   Wire.write((uint8_t *)&dz, sizeof(dz));
+  i2c_last_data = millis();
 }
 void receiveEvent(int howMany)
 {
@@ -314,6 +316,7 @@ void receiveEvent(int howMany)
     }
   }
   calcTotalVolume();
+  i2c_last_data = millis();
 }
 
 
@@ -437,6 +440,10 @@ void setup()
 void loop()
 {
   if (TWAR != TWI_SA) TWAR = TWI_SA;
+  if ((millis()-i2c_last_data) >WAIT_I2C_QUERY){
+    TWCR = 0;
+    Wire.begin(DOZER_I2C_ADDR);
+  }
   #ifdef USE_DS18B20
   ow_loop();
   #endif

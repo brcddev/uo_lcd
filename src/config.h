@@ -40,5 +40,5 @@
 #define soundA B00000101                      // Ритм автостопа
 #define soundB B01011101                     // Ритм внешнего стопа
                               // Светодиод на панели
-
+#define WAIT_I2C_QUERY 60000
 #endif //_CONFIG_H_
