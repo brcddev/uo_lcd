@@ -5,7 +5,7 @@
 #define DS_ALARM_TIME (1000*10)
 //#define AUTO_RATE 7 //процент уменьшения отбора после внешнего стопа.
 #define MIN_RATE 900 //минимальный отбор тела, ниже которого не снижаемся
-#define RMS_CURRENT 1200
+#define RMS_CURRENT 700
 #define MICROSTEPS 8
 
 // Подключение TMC2209
