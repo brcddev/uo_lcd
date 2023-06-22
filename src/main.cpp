@@ -2,6 +2,7 @@
 //пины подключения настраиваем в файле LCDSoftI2C.cpp
 #define I2C_PULLUP 1
 #define I2C_FASTMODE 1
+#define I2C_TIMEOUT 3
 #define SCL_PORT PORTB
 #define SDA_PORT PORTB
 #define SCL_PIN 2       // Arduino Pin 10
@@ -359,9 +360,10 @@ void setup()
   driver.sedn(0b01);
   driver.SGTHRS(STALL_VALUE);
   driver.push();
-  /*
-    Serial.begin(115200);
-    Serial.print(F("\nTesting connection..."));
+  
+    //Serial.begin(115200);
+    //Serial.print(F("\nTesting connection..."));
+    /*
     uint8_t result = driver.test_connection();
     if (result) {
         Serial.println(F("failed!"));
@@ -391,6 +393,7 @@ void setup()
   TIMER2_attach_COMPA();                    // прерывание с опросом энкодера
   //
   // Настройка дисплея
+  
   lcd.initialize();
   lcd.clearDisplay();
 
@@ -426,19 +429,23 @@ void setup()
   }
   else {
     currentMode = RUNNING;
-    printMainScreen();
+    //printMainScreen();
   }
   //Serial.println(stepsFor100ml);
 
   st_rate = (step_t) {rateBigStep, rateMidStep, rateMidStep};
   id_rate = (inc_dec_t){&flagAcceleration,&rate,maximumRate,&st_rate};
   id_vol =  (inc_dec_t){NULL,&drinkVolume,maxDrinkVol,&st_rate};
-  WDT_attachInterrupt(512); // FIIX!!! CHECK!!!!
+  //WDT_attachInterrupt(256); // FIIX!!! CHECK!!!!
 }
 //--------------------------------------------------------------------------------------
+uint32_t lt=0;
 //---------------------- Начало основного цикла ----------------------------------------
 void loop()
 {
+  
+  lt=millis();
+  //Serial.println("loop");
   if (TWAR != TWI_SA) TWAR = TWI_SA;
   if ((millis()-i2c_last_data) >WAIT_I2C_QUERY){
     TWCR = 0;
