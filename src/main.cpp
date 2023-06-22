@@ -2,7 +2,7 @@
 //пины подключения настраиваем в файле LCDSoftI2C.cpp
 #define I2C_PULLUP 1
 #define I2C_FASTMODE 1
-#define I2C_TIMEOUT 3
+#define I2C_TIMEOUT 10
 #define SCL_PORT PORTB
 #define SDA_PORT PORTB
 #define SCL_PIN 2       // Arduino Pin 10
@@ -159,6 +159,53 @@ void setMaximumRate();
 void setMinimumRate();
 void tryToTune();
 uint16_t calcCRC16(uint8_t const *buf, uint32_t len);
+void scanSoft(void)
+{
+  uint8_t add = 0;
+  int found = false;
+  Serial.println("Scanning ...");
+
+  Serial.println("       8-bit 7-bit addr");
+  // try read
+  do {
+    delay(100);
+    if (i2c_start(add | I2C_READ)) {
+      found = true;
+      i2c_read(true);
+      i2c_stop();
+      Serial.print("Read:   0x");
+      if (add < 0x0F) Serial.print(0, HEX);
+      Serial.print(add+I2C_READ, HEX);
+      Serial.print("  0x");
+      if (add>>1 < 0x0F) Serial.print(0, HEX);
+      Serial.println(add>>1, HEX);
+    } else i2c_stop();
+    add += 2;
+  } while (add);
+
+  // try write
+  add = 0;
+  do {
+    if (i2c_start(add | I2C_WRITE)) {
+      found = true;
+      i2c_stop();
+      Serial.print("Write:  0x");    
+      if (add < 0x0F) Serial.print(0, HEX);  
+      Serial.print(add+I2C_WRITE, HEX);
+      Serial.print("  0x");
+      if (add>>1 < 0x0F) Serial.print(0, HEX);
+      Serial.println(add>>1, HEX);
+    } else i2c_stop();
+    i2c_stop();
+    add += 2;
+  } while (add);
+  if (!found) Serial.println(F("No I2C device found."));
+  Serial.println("Done\n\n");
+  delay(1000);
+}
+
+
+
 //uint16_t prescalers[]={0,1,8,64,256,1024};
 //--------------------------------------------------------------------------------------
 //void calcBaseOCR1A(){
@@ -361,7 +408,7 @@ void setup()
   driver.SGTHRS(STALL_VALUE);
   driver.push();
   
-    //Serial.begin(115200);
+    Serial.begin(115200);
     //Serial.print(F("\nTesting connection..."));
     /*
     uint8_t result = driver.test_connection();
@@ -429,7 +476,7 @@ void setup()
   }
   else {
     currentMode = RUNNING;
-    //printMainScreen();
+    printMainScreen();
   }
   //Serial.println(stepsFor100ml);
 
@@ -437,6 +484,7 @@ void setup()
   id_rate = (inc_dec_t){&flagAcceleration,&rate,maximumRate,&st_rate};
   id_vol =  (inc_dec_t){NULL,&drinkVolume,maxDrinkVol,&st_rate};
   //WDT_attachInterrupt(256); // FIIX!!! CHECK!!!!
+  //scanSoft();
 }
 //--------------------------------------------------------------------------------------
 uint32_t lt=0;
