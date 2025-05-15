@@ -145,8 +145,8 @@ inc_dec_t id_rate,id_vol;
 void decreaseVal(inc_dec_t *v);
 void increaseVal(inc_dec_t *v);
 void tryToSaveStepsFor100ml();
-void decreaseRate();
-void increaseRate();
+void decreaseRate(uint8_t x_pos);
+void increaseRate(uint8_t x_pos);
 void calcTotalVolume();
 void calcOCR1A();
 void oneTenthSub();
@@ -284,8 +284,7 @@ void pauseRun(){
   digitalWrite(DRV_EN, HIGH);
   stepEnabled = false;
   currentMode = PAUSED;
-  lcd.setCursor(0, 0);
-  lcd.print(STRING_01);//02
+  print_name(STRING_01);//02
 }
 void requestEvent()
 {
@@ -330,12 +329,14 @@ void receiveEvent(int howMany)
         case DOZER_SET_RATE:
         {
           rate=cmd.val;
-          if (rate > maximumRate)
+          if (rate > maximumRate){
             rate = maximumRate;
+          }
+          lcd.setCursor(rpVal, 1*yFONT);
+          lcd.print(formatNum(rate, 5));          
           calcOCR1A();
           resumeRun();
-          lcd.setCursor(rpVal, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
+
         }
         break;
 
@@ -497,6 +498,7 @@ void loop()
   if (TWAR != TWI_SA) TWAR = TWI_SA;
   if ((millis()-i2c_last_data) >WAIT_I2C_QUERY){
     TWCR = 0;
+    Wire.end(); 
     Wire.begin(DOZER_I2C_ADDR);
   }
   #ifdef USE_DS18B20
@@ -538,15 +540,13 @@ void loop()
         //--------------------
         if (enc1.isRight()) // Поворот по часовой стрелке увеличивает частоту шагов
         {
-          increaseRate();
+          increaseRate(tRate);
           stepEnabled = true;
-          lcd.setCursor(tRate, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
         }
         //--------------------
         if (enc1.isLeft()) // Поворот против часовой стрелки уменьшает частоту шагов
         {
-          decreaseRate();
+          decreaseRate(tRate);
           if (rate != 0)
           {
             stepEnabled = true;
@@ -555,8 +555,6 @@ void loop()
           {
             stepEnabled = false;
           }
-          lcd.setCursor(tRate,1*yFONT);
-          lcd.print(formatNum(rate, 5));
         }
         //--------------------
         if (enc1.isClick())
@@ -588,16 +586,12 @@ void loop()
         //--------------------
         if (enc1.isRight()) // Поворот по часовой стрелке увеличивает частоту шагов
         {
-          increaseRate();
-          lcd.setCursor(tRate, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
+          increaseRate(tRate);
         }
         //--------------------
         if (enc1.isLeft()) // Поворот против часовой стрелки уменьшает частоту шагов
         {
-          decreaseRate();
-          lcd.setCursor(tRate, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
+          decreaseRate(tRate);
         }
         //--------------------
         if (enc1.isClick())
@@ -668,15 +662,13 @@ void loop()
         //--------------------
         if (enc1.isRight())     // Вращение по часовой (режим RUNNING)
         {
-          increaseRate();
+          increaseRate(rpVal);
           stepEnabled = true;
-          lcd.setCursor(rpVal, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
         }
         //--------------------
         if (enc1.isLeft())      // Вращение против часовой (режим RUNNING)
         {
-          decreaseRate();
+          decreaseRate(rpVal);
           if (rate != 0)
           {
             stepEnabled = true;
@@ -685,8 +677,6 @@ void loop()
           {
             stepEnabled = false;
           }
-          lcd.setCursor(rpVal, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
         }
         //--------------------
         if (enc1.isHolded())    // Удержание кнопки, сброс общего счетчика
@@ -751,16 +741,12 @@ void loop()
         //--------------------
         if (enc1.isRight())
         {
-          increaseRate();
-          lcd.setCursor(rpVal, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
+          increaseRate(rpVal);
         }
         //--------------------
         if (enc1.isLeft())
         {
-          decreaseRate();
-          lcd.setCursor(rpVal, 1*yFONT);
-          lcd.print(formatNum(rate, 5));
+          decreaseRate(rpVal);
         }
         //--------------------
         if (enc1.isHolded())
@@ -879,9 +865,7 @@ void loop()
           }
           else
           {
-            increaseRate();
-            lcd.setCursor(rpVal, 1*yFONT);
-            lcd.print(formatNum(rate, 5));
+            increaseRate(rpVal);
           }
         }
         //--------------------
@@ -893,9 +877,7 @@ void loop()
           }
           else
           {
-            decreaseRate();
-            lcd.setCursor(rpVal, 1*yFONT);
-            lcd.print(formatNum(rate, 5));
+            decreaseRate(rpVal);
           }
         }
         //--------------------.
@@ -1077,16 +1059,20 @@ void setMinimumRate()
 }
 //--------------------------------------------------------------------------------------
 // Увеличение скорости отбора ----------------------------------------------------------
-void increaseRate()
+void increaseRate(uint8_t x_pos)
 {
   increaseVal(&id_rate);
+  lcd.setCursor(x_pos, 1*yFONT);
+  lcd.print(formatNum(rate, 5));
   calcOCR1A();
 }
 //--------------------------------------------------------------------------------------
 // Уменьшение скорости отбора ----------------------------------------------------------
-void decreaseRate()
+void decreaseRate(uint8_t x_pos)
 {
   decreaseVal(&id_rate);
+  lcd.setCursor(x_pos, 1*yFONT);
+  lcd.print(formatNum(rate, 5));
   calcOCR1A();
 }
 
